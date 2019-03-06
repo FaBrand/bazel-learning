@@ -1,5 +1,5 @@
 sh_binary(
-    name = "clang_tidy_wrapper",
-    srcs = ["clang_tidy_wapper.sh"],
+    name = "command_wrapper",
+    srcs = ["command_wrapper.sh"],
     visibility = ["//visibility:public"],
 )

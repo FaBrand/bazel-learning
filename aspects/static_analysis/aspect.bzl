@@ -92,7 +92,7 @@ def _invoke_clang_tidy(target, ctx):
     visible_headers = target[CcInfo].compilation_context.headers.to_list()
     ctx.actions.run(
         inputs = srcs + visible_headers,
-        executable = ctx.executable._clang_tidy_wrapper,
+        executable = ctx.executable._command_wrapper,
         tools = [ctx.executable._clang_tidy],
         outputs = [analysis_results],
         arguments = [args],
@@ -128,8 +128,8 @@ clang_tidy_aspect = aspect(
             executable = True,
             cfg = "host",
         ),
-        "_clang_tidy_wrapper": attr.label(
-            default = Label("//static_analysis:clang_tidy_wrapper"),
+        "_command_wrapper": attr.label(
+            default = Label("//static_analysis:command_wrapper"),
             executable = True,
             cfg = "host",
         ),

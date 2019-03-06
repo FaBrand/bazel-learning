@@ -4,7 +4,7 @@
 #include "module4/source4.hpp"
 #include "module5/source5.hpp"
 
-int main(int argc, char *argv[])
+int main()
 {
     Source1 a{};
     Source2 b{};
