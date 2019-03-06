@@ -164,11 +164,6 @@ clang_tidy = rule(
             aspects = [clang_tidy_aspect],
             doc = "List of all cc targets which should be included.",
         ),
-        "_clang_tidy": attr.label(
-            default = Label("@clang//:clang_tidy"),
-            executable = True,
-            cfg = "host",
-        ),
     },
     implementation = _clang_tidy_impl,
 )
