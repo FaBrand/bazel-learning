@@ -1,0 +1,1 @@
+build:clang-tidy --aspects static_analysis/aspect.bzl%clang_tidy_aspect

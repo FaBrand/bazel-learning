@@ -1,0 +1,6 @@
+workspace(name = "main_workspace")
+
+local_repository(
+    name = "sub",
+    path = "sub_workspace",
+)

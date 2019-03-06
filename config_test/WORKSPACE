@@ -1,0 +1,9 @@
+workspace(name = "config_test")
+
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "gtest",
+    remote = "https://github.com/google/googletest.git",
+    commit = "de5be0eb28b74ecd6335e3bd61d9dc8914ce0e57",
+)
