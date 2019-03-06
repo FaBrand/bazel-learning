@@ -1,4 +1,4 @@
-load("//static_analysis:aspect.bzl", "clang_tidy")
+load("//static_analysis:clang_tidy.bzl", "clang_tidy")
 
 clang_tidy(
     name = "clang_tidy_main",
