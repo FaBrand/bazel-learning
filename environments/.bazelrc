@@ -1,0 +1,18 @@
+test --test_output=all
+
+# Try out a few different variable definitions
+test --test_env=TEST_ENV_VARIABLE_WITH_VALUE=FOOBAR
+test --test_env=TEST_ENV_VARIABLE_WITHOUT_VALUE=
+test --test_env=TEST_ENV_VARIABLE_ONLY_DEFINED
+
+test --test_env=TEST_ENV_VARIABLE_FROM_ENV_WITH_VALUE=FOOBAR
+test --test_env=TEST_ENV_VARIABLE_FROM_ENV_WITHOUT_VALUE=
+test --test_env=TEST_ENV_VARIABLE_FROM_ENV_ONLY_DEFINED
+
+test:with_action --action_env=ACTION_ENV_VARIABLE_WITH_VALUE=FOOBAR
+test:with_action --action_env=ACTION_ENV_VARIABLE_WITHOUT_VALUE=
+test:with_action --action_env=ACTION_ENV_VARIABLE_ONLY_DEFINED
+
+test:with_action --action_env=ACTION_ENV_VARIABLE_FROM_ENV_WITH_VALUE=FOOBAR
+test:with_action --action_env=ACTION_ENV_VARIABLE_FROM_ENV_WITHOUT_VALUE=
+test:with_action --action_env=ACTION_ENV_VARIABLE_FROM_ENV_ONLY_DEFINED
