@@ -13,6 +13,7 @@ cc_library(
 cc_binary(
     name = "bin_with_shared_dependencies",
     srcs = ["main.cpp"],
+    linkstatic = False,
     deps = [":mylib"],
 )
 
