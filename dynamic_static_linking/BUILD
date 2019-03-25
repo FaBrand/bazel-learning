@@ -33,6 +33,13 @@ cc_binary(
     deps = [":mylib"],
 )
 
+# This is basically an alias for mylib
+cc_binary(
+    name = "libalias.so",
+    linkshared = True,
+    deps = [":mylib"],
+)
+
 # Put it in a zip
 pkg_tar(
     name = "debian-data",
