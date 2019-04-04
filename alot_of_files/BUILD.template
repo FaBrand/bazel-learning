@@ -9,4 +9,7 @@ cc_library(
         "*.h",
     ]),
     visibility = ["//visibility:public"],
+    deps = [
+        "<DEP>",
+    ],
 )
