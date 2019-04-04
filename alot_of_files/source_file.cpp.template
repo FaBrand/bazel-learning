@@ -1,0 +1,4 @@
+#include "source_file.h"
+
+SourceFile::SourceFile() = default;
+void SourceFile::FooBar() const {};
