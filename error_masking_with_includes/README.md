@@ -12,14 +12,16 @@ Since the warning is in the header, the build should fail.
 ```bash
 bazel build //includes_and_strip_prefix
 ```
-### Building only with strip prefix and `includes=` fails as expected
-
-```bash
-bazel build //only_includes
-```
-### Building only with `includes=` does compile! which it shouldn't
+Building only with strip prefix and includes fails as expected
 
 ```bash
 bazel build //only_strip_prefix
 ```
-### Building only with strip prefix fails as expected
+Building only with strip prefix fails as expected
+
+
+
+```bash
+bazel build //only_includes
+```
+Building only with includes does compile! which it shouldn't
