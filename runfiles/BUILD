@@ -1,4 +1,4 @@
-load(":runfile.bzl", "data_runfile", "default_runfile", "runfile", "runfile_symlinks")
+load(":runfile.bzl", "data_runfile", "default_runfile", "runfile", "runfile_root_symlinks", "runfile_symlinks")
 
 runfile(
     name = "runfile",
@@ -16,6 +16,10 @@ runfile_symlinks(
     name = "runfile_symlinks",
 )
 
+runfile_root_symlinks(
+    name = "runfile_root_symlinks",
+)
+
 py_binary(
     name = "app",
     srcs = ["app.py"],
@@ -23,6 +27,7 @@ py_binary(
         ":data_runfile",
         ":default_runfile",
         ":runfile",
+        ":runfile_root_symlinks",
         ":runfile_symlinks",
     ],
 )
