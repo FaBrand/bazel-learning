@@ -6,9 +6,12 @@ from pprint import pprint
 
 
 def load_json(json_file):
-    with open(json_file) as jsn:
-        data = json.load(jsn)
-    print('Name loaded from json:', data['name'])
+    try:
+        with open(json_file) as jsn:
+            data = json.load(jsn)
+        print('Name loaded from json:', data['name'])
+    except FileNotFoundError:
+        print('File could not be found:', json_file)
 
 
 def print_env_info():
