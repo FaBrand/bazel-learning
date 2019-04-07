@@ -69,3 +69,21 @@ data_runfile = rule(
     attrs = {},
     implementation = _data_runfile_impl,
 )
+
+def _runfile_symlinks_impl(ctx):
+    out = ctx.actions.declare_file("{name}.json".format(name = ctx.attr.name))
+    content = runfile_template.format(name = ctx.attr.name)
+    ctx.actions.write(output = out, content = content)
+
+    linked_file = ctx.actions.declare_file("sub_folder/{name}.json".format(name = ctx.attr.name))
+    content = runfile_template.format(name = ctx.attr.name)
+    ctx.actions.write(output = linked_file, content = content)
+
+    runfiles = ctx.runfiles(files = [out], symlinks = {"{name}_link".format(name = ctx.attr.name): linked_file})
+
+    return DefaultInfo(files = depset([out]), runfiles = runfiles)
+
+runfile_symlinks = rule(
+    attrs = {},
+    implementation = _runfile_symlinks_impl,
+)
