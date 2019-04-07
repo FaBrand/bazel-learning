@@ -20,3 +20,4 @@ def print_env_info():
 if __name__ == "__main__":
     print_env_info()
     load_json('runfile.json')
+    load_json('default_runfile.json')
