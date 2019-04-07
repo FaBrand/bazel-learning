@@ -81,7 +81,7 @@ def _runfile_symlinks_impl(ctx):
 
     runfiles = ctx.runfiles(files = [out], symlinks = {"{name}_link".format(name = ctx.attr.name): linked_file})
 
-    return DefaultInfo(files = depset([out]), runfiles = runfiles)
+    return DefaultInfo(files = depset([out, linked_file]), runfiles = runfiles)
 
 runfile_symlinks = rule(
     attrs = {},
@@ -97,7 +97,7 @@ def _runfile_root_symlinks_impl(ctx):
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = linked_file, content = content)
 
-    runfiles = ctx.runfiles(files = [out], root_symlinks = {"{name}_root_link".format(name = ctx.attr.name): linked_file})
+    runfiles = ctx.runfiles(files = [out, linked_file], root_symlinks = {"{name}_root_link".format(name = ctx.attr.name): linked_file})
 
     return DefaultInfo(files = depset([out]), runfiles = runfiles)
 

@@ -1,4 +1,4 @@
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_deb", "pkg_tar")
 load(":runfile.bzl", "data_runfile", "default_runfile", "runfile", "runfile_root_symlinks", "runfile_symlinks")
 
 runfile(
@@ -60,4 +60,18 @@ pkg_tar(
 pkg_tar(
     name = "data_dependent_app_pkg",
     srcs = [":data_dependent_app"],
+)
+
+pkg_deb(
+    name = "debian_packaging",
+    architecture = "amd64",
+    data = ":data_dependent_app_pkg",
+    depends = [
+        "zlib1g-dev",
+        "unzip",
+    ],
+    description = "Some description",
+    maintainer = "John Doe <John.Doe@whatever.com>",
+    package = "data_dependent_app_pkg",
+    version = "0.0.1",
 )
