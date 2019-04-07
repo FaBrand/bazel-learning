@@ -28,7 +28,7 @@ runfile_template = """{{
 }}
 """
 
-def _custom_runfile_impl(ctx):
+def _runfile_impl(ctx):
     out = ctx.actions.declare_file("{name}.json".format(name = ctx.attr.name))
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = out, content = content)
@@ -37,7 +37,7 @@ def _custom_runfile_impl(ctx):
 
     return DefaultInfo(files = depset([out]), runfiles = runfiles)
 
-custom_runfile = rule(
+runfile = rule(
     attrs = {},
-    implementation = _custom_runfile_impl,
+    implementation = _runfile_impl,
 )

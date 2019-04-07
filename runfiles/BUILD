@@ -1,11 +1,11 @@
-load(":custom_runfile.bzl", "custom_runfile")
+load(":runfile.bzl", "runfile")
 
-custom_runfile(
-    name = "example_json",
+runfile(
+    name = "runfile",
 )
 
 py_binary(
     name = "app",
     srcs = ["app.py"],
-    data = [":example_json"],
+    data = [":runfile"],
 )
