@@ -1,6 +1,5 @@
-runfile_template = """
-{{
-  "name": {name},
+runfile_template = """{{
+  "name": "{name}",
   "lastName": "Smith",
   "isAlive": true,
   "age": 27,
