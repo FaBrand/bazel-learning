@@ -1,3 +1,4 @@
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
 load(":runfile.bzl", "data_runfile", "default_runfile", "runfile", "runfile_root_symlinks", "runfile_symlinks")
 
 runfile(
@@ -44,4 +45,19 @@ py_binary(
     srcs = ["app.py"],
     data = [":app"],
     main = "app.py",
+)
+
+pkg_tar(
+    name = "app_pkg",
+    srcs = [":app"],
+)
+
+pkg_tar(
+    name = "dependent_app_pkg",
+    srcs = [":dependent_app"],
+)
+
+pkg_tar(
+    name = "data_dependent_app_pkg",
+    srcs = [":data_dependent_app"],
 )
