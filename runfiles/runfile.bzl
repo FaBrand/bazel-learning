@@ -55,3 +55,17 @@ default_runfile = rule(
     attrs = {},
     implementation = _default_runfile_impl,
 )
+
+def _data_runfile_impl(ctx):
+    out = ctx.actions.declare_file("{name}.json".format(name = ctx.attr.name))
+    content = runfile_template.format(name = ctx.attr.name)
+    ctx.actions.write(output = out, content = content)
+
+    runfiles = ctx.runfiles(files = [out])
+
+    return DefaultInfo(files = depset([out]), runfiles = runfiles)
+
+data_runfile = rule(
+    attrs = {},
+    implementation = _data_runfile_impl,
+)
