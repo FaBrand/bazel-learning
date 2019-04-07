@@ -9,7 +9,7 @@ def load_json(json_file):
     try:
         with open(json_file) as jsn:
             data = json.load(jsn)
-        print('Name loaded from json:', data['name'])
+        print('Loaded json file:', json_file)
     except FileNotFoundError:
         print('File could not be found:', json_file)
 
@@ -25,3 +25,6 @@ if __name__ == "__main__":
     load_json('runfile.json')
     load_json('default_runfile.json')
     load_json('data_runfile.json')
+    load_json('runfile_symlinks_link')
+    load_json('runfile_root_symlinks_link')
+    load_json('runfile_root_symlinks.json')
