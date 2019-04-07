@@ -28,14 +28,19 @@ runfile_template = """{{
 }}
 """
 
+common_runfiles_args = {
+    "collect_data": True,
+    "collect_default": True,
+}
+
 def _runfile_impl(ctx):
     out = ctx.actions.declare_file("{name}.json".format(name = ctx.attr.name))
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = out, content = content)
 
-    runfiles = ctx.runfiles(files = [out])
+    runfiles = ctx.runfiles(files = [out], **common_runfiles_args)
 
-    return DefaultInfo(files = depset([out]), runfiles = runfiles)
+    return DefaultInfo(runfiles = runfiles)
 
 runfile = rule(
     attrs = {},
@@ -47,9 +52,9 @@ def _default_runfile_impl(ctx):
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = out, content = content)
 
-    runfiles = ctx.runfiles(files = [out])
+    runfiles = ctx.runfiles(files = [out], **common_runfiles_args)
 
-    return DefaultInfo(default_runfiles = runfiles, files = depset([out]))
+    return DefaultInfo(default_runfiles = runfiles)
 
 default_runfile = rule(
     attrs = {},
@@ -61,9 +66,9 @@ def _data_runfile_impl(ctx):
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = out, content = content)
 
-    runfiles = ctx.runfiles(files = [out])
+    runfiles = ctx.runfiles(files = [out], **common_runfiles_args)
 
-    return DefaultInfo(data_runfiles = runfiles, files = depset([out]))
+    return DefaultInfo(data_runfiles = runfiles)
 
 data_runfile = rule(
     attrs = {},
@@ -79,9 +84,9 @@ def _runfile_symlinks_impl(ctx):
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = linked_file, content = content)
 
-    runfiles = ctx.runfiles(symlinks = {"{name}_link".format(name = ctx.attr.name): linked_file})
+    runfiles = ctx.runfiles(symlinks = {"{name}_link".format(name = ctx.attr.name): linked_file}, **common_runfiles_args)
 
-    return DefaultInfo(files = depset([out, linked_file]), runfiles = runfiles)
+    return DefaultInfo(runfiles = runfiles)
 
 runfile_symlinks = rule(
     attrs = {},
@@ -97,9 +102,9 @@ def _runfile_root_symlinks_impl(ctx):
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = linked_file, content = content)
 
-    runfiles = ctx.runfiles(root_symlinks = {"{name}_root_link".format(name = ctx.attr.name): linked_file})
+    runfiles = ctx.runfiles(root_symlinks = {"{name}_root_link".format(name = ctx.attr.name): linked_file}, **common_runfiles_args)
 
-    return DefaultInfo(files = depset([out, linked_file]), runfiles = runfiles)
+    return DefaultInfo(runfiles = runfiles)
 
 runfile_root_symlinks = rule(
     attrs = {},
