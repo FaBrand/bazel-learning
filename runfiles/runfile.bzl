@@ -49,7 +49,7 @@ def _default_runfile_impl(ctx):
 
     runfiles = ctx.runfiles(files = [out])
 
-    return DefaultInfo(files = depset([out]), runfiles = runfiles)
+    return DefaultInfo(default_runfiles = runfiles, files = depset([out]))
 
 default_runfile = rule(
     attrs = {},
@@ -63,7 +63,7 @@ def _data_runfile_impl(ctx):
 
     runfiles = ctx.runfiles(files = [out])
 
-    return DefaultInfo(files = depset([out]), runfiles = runfiles)
+    return DefaultInfo(data_runfiles = runfiles, files = depset([out]))
 
 data_runfile = rule(
     attrs = {},
@@ -79,7 +79,7 @@ def _runfile_symlinks_impl(ctx):
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = linked_file, content = content)
 
-    runfiles = ctx.runfiles(files = [out], symlinks = {"{name}_link".format(name = ctx.attr.name): linked_file})
+    runfiles = ctx.runfiles(symlinks = {"{name}_link".format(name = ctx.attr.name): linked_file})
 
     return DefaultInfo(files = depset([out, linked_file]), runfiles = runfiles)
 
@@ -97,9 +97,9 @@ def _runfile_root_symlinks_impl(ctx):
     content = runfile_template.format(name = ctx.attr.name)
     ctx.actions.write(output = linked_file, content = content)
 
-    runfiles = ctx.runfiles(files = [out, linked_file], root_symlinks = {"{name}_root_link".format(name = ctx.attr.name): linked_file})
+    runfiles = ctx.runfiles(root_symlinks = {"{name}_root_link".format(name = ctx.attr.name): linked_file})
 
-    return DefaultInfo(files = depset([out]), runfiles = runfiles)
+    return DefaultInfo(files = depset([out, linked_file]), runfiles = runfiles)
 
 runfile_root_symlinks = rule(
     attrs = {},
