@@ -20,12 +20,22 @@ def _with_context_test_impl(ctx):
 
     ctx.actions.write(output = ctx.outputs.executable, content = with_context_content, is_executable = True)
 
-    runfiles = ctx.runfiles(collect_data = True, files = ctx.files.runner + ctx.files.launch)
+    runfiles = ctx.runfiles(
+        collect_data = True,
+        # This part is redundant if the files are provided via the data attribute
+        # Even though it can be necessary to distinguish between the different files.
+        # However, transitive runfiles seem to be collected only from data, etc
+        files = [ctx.file.launch] + ctx.files.runner,
+    )
 
     return DefaultInfo(runfiles = runfiles)
 
 with_context_test = rule(
     attrs = {
+        # This is the important bit.
+        # It has to be a label_list and named one-of ['data', 'srcs', 'hdrs']
+        # In combination with collect_data = True, bazel collects the transitive runfiles
+        # and sets them up at runtime
         "data": attr.label_list(
             allow_files = True,
         ),
