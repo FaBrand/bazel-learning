@@ -12,7 +12,10 @@ py_binary(
 
 with_context_test(
     name = "with_context_and_py_runner",
-    data = [":py_runner"],
+    data = [
+        ":py_runner",
+    ],
+    launch = ":launchfile",
     runner = ":py_runner",
 )
 
