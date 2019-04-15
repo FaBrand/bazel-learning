@@ -52,3 +52,26 @@ with_context_test = rule(
     test = True,
     implementation = _with_context_test_impl,
 )
+
+with_default_context_test = rule(
+    attrs = {
+        # This can be defaulted, but overridden from the callside. So not very safe
+        "data": attr.label_list(
+            allow_files = True,
+            default = ["//:py_runner"],
+        ),
+        # This could be scoped to private, but since i reuse the impl, i didn't do it
+        "runner": attr.label(
+            default = "//:py_runner",
+            executable = True,
+            allow_files = True,
+            cfg = "host",
+        ),
+        "launch": attr.label(
+            allow_single_file = True,
+        ),
+    },
+    executable = True,
+    test = True,
+    implementation = _with_context_test_impl,
+)

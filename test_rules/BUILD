@@ -1,4 +1,4 @@
-load(":test_rule.bzl", "basic_test", "with_context_test")
+load(":test_rule.bzl", "basic_test", "with_context_test", "with_default_context_test")
 
 basic_test(
     name = "basic_test",
@@ -12,12 +12,14 @@ py_binary(
 
 with_context_test(
     name = "with_context_and_py_runner",
-    data = [
-        ":launchfile",
-        ":py_runner",
-    ],
+    data = [":py_runner"],
     launch = ":launchfile",
     runner = ":py_runner",
+)
+
+with_default_context_test(
+    name = "with_default_context_and_py_runner",
+    launch = ":launchfile",
 )
 
 filegroup(
