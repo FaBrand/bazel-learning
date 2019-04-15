@@ -7,7 +7,10 @@ basic_test(
 py_binary(
     name = "py_runner",
     srcs = [":py_runner.py"],
-    deps = ["//some_important_py_lib"],
+    deps = [
+        "//another_important_py_lib",
+        "//some_important_py_lib",
+    ],
 )
 
 with_context_test(
