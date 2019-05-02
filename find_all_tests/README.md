@@ -49,7 +49,7 @@ $ bazel test $(bazel query --noimplicit_deps 'tests(rdeps(set(//...), deps(//:b)
 //l2/tests:l2_test                                                       PASSED in 0.1s
 ```
 
-###### Conclusion
+## Conclusion
 
 As `bazel test ...` would execute all tests. More than required in this case.
 ```diff
@@ -67,7 +67,7 @@ You could even name the variables:
 $ --noimplicit_deps 'let target=//:b in let closure=//... in tests(rdeps(set($closure), deps($target)))'
 ```
 
-###### References
+## References
 
 1) [bazel query doc](https://docs.bazel.build/versions/master/query.html)
 2) [bazel query how-to](https://docs.bazel.build/versions/master/query-how-to.html)
