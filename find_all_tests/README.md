@@ -54,9 +54,9 @@ $ bazel test $(bazel query --noimplicit_deps 'tests(rdeps(set(//...), deps(//:b)
 As `bazel test ...` would execute all tests. More than required in this case.
 ```diff
 # diff <(bazel test ... --nocache_test_results) <(bazel query --noimplicit_deps 'let target=//:b in let closure=//... in tests(rdeps(set($closure), deps($target)))') -y                                                                                                  2 ↵
-//l1:l1_test                                                  | //l2/tests:l2_test
+//l1:l1_test                                                  | //l1:l1_test
 //l2:l2_test                                                  | //l2:l2_test
-//l2/tests:l2_test                                            | //l1:l1_test
+//l2/tests:l2_test                                            | //l2/tests:l2_test
 //l3:l3_test                                                  <
 ```
 
