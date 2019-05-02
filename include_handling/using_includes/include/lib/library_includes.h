@@ -5,6 +5,10 @@ class LibraryIncludes
 {
   public:
     LibraryIncludes();
+    void ThisShouldTriggerAWarning()
+    {
+        int a{};
+    };
 };
 
 #endif /* LIBRARY_INCLUDES_H */
