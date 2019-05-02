@@ -1,4 +1,4 @@
-#### All dependend tests
+# Find & run all dependend tests of a target
 
 Assume you have a binary `b` which aggregates multible libraries `l1, l2`.
 If you want to run all all tests that test depend on the libraries which were used when building `b`,
