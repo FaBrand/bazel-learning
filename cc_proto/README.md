@@ -19,6 +19,7 @@ env USE_BAZEL_VERSION=0.24.1 bazel aquery 'mnemonic("CppCompile", //a_library:li
 env USE_BAZEL_VERSION=0.25.0 bazel aquery 'mnemonic("CppCompile", //a_library:lib)'
 ```
 
+```bash
 | building with bazel 0.24.1                                                   | building with bazel 0.25.0                                                                   |
 | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | action 'Compiling a_library/lib.cpp'                                         | action 'Compiling a_library/lib.cpp'                                                         |
@@ -73,48 +74,4 @@ env USE_BAZEL_VERSION=0.25.0 bazel aquery 'mnemonic("CppCompile", //a_library:li
 | a_library/lib.cpp \                                                          | a_library/lib.cpp \                                                                          |
 | -o \                                                                         | -o \                                                                                         |
 | bazel-out/k8-fastbuild/bin/a_library/_objs/lib/lib.pic.o)                    | bazel-out/k8-fastbuild/bin/a_library/_objs/lib/lib.pic.o)                                    |
-
-
-
-
-
-
-
-
-
-
-
-
-|
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
