@@ -2,7 +2,6 @@
 #define LIB_H
 
 #include <proto_pkg/proto_msg.pb.h>
-#include "proto_pkg/proto_msg.pb.h"
 
 class Lib
 {

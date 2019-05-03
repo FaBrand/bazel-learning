@@ -7,5 +7,6 @@ cc_proto_library(
 proto_library(
     name = "proto_pkg",
     srcs = ["proto_msg.proto"],
-    proto_source_root = "some/sub/package/path/proto_pkg",
+    import_prefix = "proto_pkg",
+    strip_import_prefix = "",
 )
