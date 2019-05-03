@@ -1,0 +1,55 @@
+action 'Compiling a_library/lib.cpp'
+  Mnemonic: CppCompile
+  Target: //a_library:lib
+  Configuration: k8-fastbuild
+  ActionKey: 74510dc7fd37a5aabf43fe7fa5320f63
+  Inputs: [a_library/lib.cpp, bazel-out/k8-fastbuild/internal/_middlemen/_S_Sa_Ulibrary_Clib-null, external/bazel_tools/tools/cpp/grep-includes.sh]
+  Outputs: [bazel-out/k8-fastbuild/bin/a_library/_objs/lib/lib.pic.d, bazel-out/k8-fastbuild/bin/a_library/_objs/lib/lib.pic.o]
+  Command Line: (exec /usr/bin/gcc \
+    -U_FORTIFY_SOURCE \
+    -fstack-protector \
+    -Wall \
+    -Wunused-but-set-parameter \
+    -Wno-free-nonheap-object \
+    -fno-omit-frame-pointer \
+    '-std=c++0x' \
+    -MD \
+    -MF \
+    bazel-out/k8-fastbuild/bin/a_library/_objs/lib/lib.pic.d \
+    '-frandom-seed=bazel-out/k8-fastbuild/bin/a_library/_objs/lib/lib.pic.o' \
+    -fPIC \
+    -iquote \
+    . \
+    -iquote \
+    bazel-out/k8-fastbuild/genfiles \
+    -iquote \
+    bazel-out/k8-fastbuild/bin \
+    -iquote \
+    external/com_google_protobuf \
+    -iquote \
+    bazel-out/k8-fastbuild/genfiles/external/com_google_protobuf \
+    -iquote \
+    bazel-out/k8-fastbuild/bin/external/com_google_protobuf \
+    -Ibazel-out/k8-fastbuild/bin/a_library/_virtual_includes/lib \
+    -isystem \
+    some/sub/package/path \
+    -isystem \
+    bazel-out/k8-fastbuild/genfiles/some/sub/package/path \
+    -isystem \
+    bazel-out/k8-fastbuild/bin/some/sub/package/path \
+    -isystem \
+    external/com_google_protobuf/src \
+    -isystem \
+    bazel-out/k8-fastbuild/genfiles/external/com_google_protobuf/src \
+    -isystem \
+    bazel-out/k8-fastbuild/bin/external/com_google_protobuf/src \
+    -fno-canonical-system-headers \
+    -Wno-builtin-macro-redefined \
+    '-D__DATE__="redacted"' \
+    '-D__TIMESTAMP__="redacted"' \
+    '-D__TIME__="redacted"' \
+    -c \
+    a_library/lib.cpp \
+    -o \
+    bazel-out/k8-fastbuild/bin/a_library/_objs/lib/lib.pic.o)
+
