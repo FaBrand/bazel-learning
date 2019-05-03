@@ -16,3 +16,7 @@ test:with_action --action_env=ACTION_ENV_VARIABLE_ONLY_DEFINED
 test:with_action --action_env=ACTION_ENV_VARIABLE_FROM_ENV_WITH_VALUE=FOOBAR
 test:with_action --action_env=ACTION_ENV_VARIABLE_FROM_ENV_WITHOUT_VALUE=
 test:with_action --action_env=ACTION_ENV_VARIABLE_FROM_ENV_ONLY_DEFINED
+
+common --action_env=ACTION_ENV_VARIABLE_WITH_VALUE=FOOBAR
+common --action_env=ACTION_ENV_VARIABLE_WITHOUT_VALUE=
+common --action_env=ACTION_ENV_VARIABLE_ONLY_DEFINED
