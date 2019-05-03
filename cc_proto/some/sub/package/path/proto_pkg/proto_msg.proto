@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+option optimize_for = SPEED;
+
+package proto_pkg;
+
+message Timestamp
+{
+optional uint32 sec = 2;
+}
+
+message Entity
+{
+optional uint32 id = 1;
+}
+
+message Entities
+{
+optional Timestamp timestamp = 1;
+repeated Entity entities = 3;
+}
