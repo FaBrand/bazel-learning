@@ -3,15 +3,18 @@ CONSTANT_IN_LIB = {value}
 """
 
 def _gen_py_lib_impl(ctx):
-    generated_lib = ctx.actions.declare_file("/".join([ctx.attr.module, "__init__.py"]))
-    content = module_template.format(value = ctx.attr.constant_value)
-    ctx.actions.write(output = generated_lib, content = content)
-    lib = ctx.runfiles(files = [generated_lib])
+    packagefile_content = module_template.format(value = ctx.attr.constant_value)
+
+    generated_package_file = ctx.actions.declare_file("/".join([ctx.attr.module, "__init__.py"]))
+    ctx.actions.write(output = generated_package_file, content = packagefile_content)
+
     return [
-        DefaultInfo(runfiles = lib),
+        DefaultInfo(
+            runfiles = ctx.runfiles(files = [generated_package_file]),
+        ),
         PyInfo(
             imports = depset(direct = [ctx.attr.module]),
-            transitive_sources = depset(),
+            transitive_sources = depset(direct = [generated_package_file]),
         ),
     ]
 
