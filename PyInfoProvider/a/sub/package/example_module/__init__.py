@@ -1,0 +1,1 @@
+CONSTANT_IN_LIB = 84

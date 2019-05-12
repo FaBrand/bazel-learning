@@ -14,3 +14,14 @@ py_binary(
         ":generated_lib",
     ],
 )
+
+py_test(
+    name = "test_generated_py_lib",
+    srcs = ["app_test.py"],
+    main = "app_test.py",
+    deps = [
+        ":generated_lib",
+        "//a/sub/package:example_module",
+        "//a/sub/package:generated_sub_lib",
+    ],
+)
