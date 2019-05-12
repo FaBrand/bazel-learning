@@ -10,7 +10,7 @@ def _gen_py_lib_impl(ctx):
 
     return [
         DefaultInfo(
-            runfiles = ctx.runfiles(files = [generated_package_file]),
+            default_runfiles = ctx.runfiles(files = [generated_package_file]),
         ),
         PyInfo(
             imports = depset(direct = [ctx.attr.module]),
