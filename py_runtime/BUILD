@@ -31,6 +31,11 @@ py_library(
     name = "python2_dependency",
     srcs = ["a_dependency_library.py"],
     srcs_version = "PY2",
+    deps = [
+        # Uncomment to see the error for transitive python dependencies
+        # ":python3_dependency",
+        # ":python3only_dependency",
+    ],
 )
 
 py_library(
