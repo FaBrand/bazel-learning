@@ -1,0 +1,1 @@
+register_toolchains("//:python_toolchain")

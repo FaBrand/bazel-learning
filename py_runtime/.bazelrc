@@ -1,0 +1,2 @@
+common --incompatible_use_python_toolchains
+common --verbose_failures
