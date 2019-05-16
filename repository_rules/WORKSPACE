@@ -1,0 +1,7 @@
+load(":deb.bzl", "new_debian_archive")
+
+new_debian_archive(
+    name = "tinyxml",
+    sha256 = "8d2793098b1ec2f35153c14a780acd48c42970e8e491d22a2b61dc81f727ee71",
+    url = "http://de.archive.ubuntu.com/ubuntu/pool/main/t/tinyxml/libtinyxml-dev_2.6.2-2_amd64.deb",
+)
