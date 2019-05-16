@@ -34,9 +34,27 @@ py_library(
 )
 
 py_library(
+    name = "python2only_dependency",
+    srcs = ["a_dependency_library.py"],
+    srcs_version = "PY2ONLY",
+)
+
+py_library(
     name = "python3_dependency",
     srcs = ["a_dependency_library.py"],
     srcs_version = "PY3",
+)
+
+py_library(
+    name = "python3only_dependency",
+    srcs = ["a_dependency_library.py"],
+    srcs_version = "PY3ONLY",
+)
+
+py_library(
+    name = "python2and3_dependency",
+    srcs = ["a_dependency_library.py"],
+    srcs_version = "PY2AND3",
 )
 
 ###########################################################
@@ -48,7 +66,9 @@ py_binary(
     srcs = ["show_python_version.py"],
     main = "show_python_version.py",
     deps = [
-        ":python2_dependency",
+        ":python2and3_dependency",
+        ":python3_dependency",
+        ":python3only_dependency",
     ],
 )
 
@@ -59,6 +79,12 @@ py_binary(
     python_version = "PY2",
     deps = [
         ":python2_dependency",
+        ":python2and3_dependency",
+        ":python2only_dependency",
+        # Uncomment to show the hard dependency error
+        # ":python3only_dependency",
+        # Uncomment to show the hard dependency error
+        # ":python3_dependency",
     ],
 )
 
@@ -68,6 +94,12 @@ py_binary(
     main = "show_python_version.py",
     python_version = "PY3",
     deps = [
-        ":python2_dependency",
+        ":python2and3_dependency",
+        ":python3_dependency",
+        ":python3only_dependency",
+        # Uncomment to show the hard dependency error
+        # ":python2only_dependency",
+        # Uncomment to show the 2to3 build error
+        # ":python2_dependency",
     ],
 )
