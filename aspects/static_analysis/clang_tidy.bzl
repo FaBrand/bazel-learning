@@ -1,11 +1,12 @@
-ClangTidyAspect = provider()
-
+load("//:legacy_cc_provider.bzl", "get_compile_flags")
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
 load(
     "@bazel_tools//tools/build_defs/cc:action_names.bzl",
     "CPP_COMPILE_ACTION_NAME",
     "C_COMPILE_ACTION_NAME",
 )
+
+ClangTidyAspect = provider()
 
 _cpp_extensions = [
     "cc",
@@ -61,7 +62,7 @@ def _get_compile_flags(ctx, target, srcs):
         force_cpp_mode_option = " -x c++"
 
     compile_flags = (compiler_options +
-                     target.cc.compile_flags +
+                     get_compile_flags(target) +
                      (ctx.rule.attr.copts if hasattr(ctx.rule.attr, "copts") else []))
 
     # unknown by clang
@@ -140,9 +141,7 @@ clang_tidy_aspect = aspect(
 )
 
 def _clang_tidy_impl(ctx):
-    results = depset()
-    for target in ctx.attr.targets:
-        results += target[ClangTidyAspect].results
+    results = depset(transitive = [t[ClangTidyAspect].results for t in ctx.attr.targets])
 
     args = ctx.actions.args()
     args.add_all(results)

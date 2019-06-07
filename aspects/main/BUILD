@@ -8,5 +8,6 @@ cc_binary(
         "//module3:lib",
         "//module4:lib",
         "//module5:lib",
+        "//module_with_strip_includes:lib",
     ],
 )
