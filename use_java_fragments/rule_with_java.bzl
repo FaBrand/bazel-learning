@@ -1,7 +1,3 @@
-def inspect(f):
-    print(f)
-    print(dir(f))
-
 def _rule_with_java_impl(ctx):
     out = ctx.actions.declare_file(ctx.attr.name)
     java_runtime = ctx.attr._jdk[java_common.JavaRuntimeInfo]
