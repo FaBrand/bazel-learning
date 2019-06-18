@@ -18,6 +18,9 @@ I then used the solution applied [here](https://github.com/tensorflow/tensorflow
 
 #### References
 [1] https://github.com/bazelbuild/bazel/issues/5594
+
 [2] https://github.com/tensorflow/tensorflow/pull/27206/files
+
 [3] https://docs.bazel.build/versions/master/skylark/lib/java_common.html#JavaRuntimeInfo
+
 [4] https://docs.bazel.build/versions/0.27.0/skylark/lib/JavaRuntimeInfo.html
