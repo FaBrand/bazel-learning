@@ -50,16 +50,22 @@ py_binary(
 pkg_tar(
     name = "app_pkg",
     srcs = [":app"],
+    package_dir = "/usr/share/test_app",
+    strip_prefix = ".",
 )
 
 pkg_tar(
     name = "dependent_app_pkg",
     srcs = [":dependent_app"],
+    package_dir = "/usr/share/test_app",
+    strip_prefix = ".",
 )
 
 pkg_tar(
     name = "data_dependent_app_pkg",
     srcs = [":data_dependent_app"],
+    package_dir = "/usr/share/test_app",
+    strip_prefix = ".",
 )
 
 pkg_deb(
