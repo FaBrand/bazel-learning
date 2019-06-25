@@ -43,5 +43,28 @@ pkg_deb(
     homepage = "https://foo.bar.de",
     maintainer = "John Doe <john@doe.com>",
     package = "sub_packages-dev",
-    version = "0.0.4",
+    version = "0.0.1",
+)
+
+genrule(
+    name = "gen_version_file",
+    outs = ["version"],
+    cmd = "echo 'version 0.0.42' > $@",
+)
+
+pkg_deb(
+    name = "generated_version_file",
+    architecture = "amd64",
+    built_using = "bazel (0.26.1)",
+    data = ":pkg_subdir",
+    description_file = "README.md",
+    homepage = "https://foo.bar.de",
+    maintainer = "John Doe <john@doe.com>",
+    package = "generated_version_file",
+    # This only works partly
+    # The Version is written into the debian metadata
+    # But is not included in the name of the generated debian file
+    # This makes sense, considering that bazel doesn't know what the generated
+    # file will be named when it is declared
+    version_file = ":gen_version_file",
 )
