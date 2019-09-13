@@ -22,6 +22,7 @@ debian_archive(
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libstdc++6_8.3.0-6_amd64.deb": "",
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-defaults/g++_8.3.0-1_amd64.deb": "",
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-defaults/gcc_8.3.0-1_amd64.deb": "",
-        "http://ftp.de.debian.org/debian/pool/main/g/glibc/libc6-dev_2.28-10_amd64.deb": "",
+        "http://ftp.de.debian.org/debian/pool/main/g/glibc/libc6-dev_2.24-11+deb9u4_amd64.deb": "",
+        "http://ftp.de.debian.org/debian/pool/main/l/linux/linux-libc-dev_4.9.189-3_amd64.deb": "",
     },
 )

@@ -76,17 +76,38 @@ def _impl(ctx):
                     flag_group(
                         flags = [
                             "-isystem",
-                            "%{sysroot}/usr/include",
-                            "-isystem",
                             "%{sysroot}/usr/include/c++/8",
                             "-isystem",
                             "%{sysroot}/usr/include/c++/8/backward",
+                            "-isystem",
+                            "%{sysroot}/usr/include/x86_64-linux-gnu",
                             "-isystem",
                             "%{sysroot}/usr/include/x86_64-linux-gnu/c++/8",
                             "-isystem",
                             "%{sysroot}/usr/lib/gcc/x86_64-linux-gnu/8/include",
                             "-isystem",
-                            "%{sysroot}/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed",
+                            "%{sysroot}/usr/include",
+                        ],
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    default_link_flags_feature = feature(
+        name = "default_link_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = [
+                    ACTION_NAMES.cpp_link_executable,
+                    ACTION_NAMES.cpp_link_dynamic_library,
+                    ACTION_NAMES.cpp_link_nodeps_dynamic_library,
+                ],
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-lstdc++",
                         ],
                     ),
                 ],
@@ -95,6 +116,7 @@ def _impl(ctx):
     )
 
     features = [
+        default_link_flags_feature,
         sysroot_feature,
         toolchain_include_directories_feature,
     ]
@@ -151,12 +173,11 @@ def _impl(ctx):
     ]
 
     cxx_builtin_include_directories = [
-        "%sysroot%/usr/include",
         "%sysroot%/usr/include/c++/8",
+        "%sysroot%/usr/include/x86_64-linux-gnu",
         "%sysroot%/usr/include/c++/8/backward",
-        "%sysroot%/usr/include/x86_64-linux-gnu/c++/8",
         "%sysroot%/usr/lib/gcc/x86_64-linux-gnu/8/include",
-        "%sysroot%/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed",
+        "%sysroot%/usr/include/x86_64-linux-gnu/c++/8",
     ]
 
     return [
