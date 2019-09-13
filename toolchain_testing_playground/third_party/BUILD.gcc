@@ -1,0 +1,7 @@
+filegroup(
+    name = "all_files",
+    srcs = glob(["usr/**/*"]),
+    visibility = ["//visibility:public"],
+)
+
+# vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab ft=bzl:

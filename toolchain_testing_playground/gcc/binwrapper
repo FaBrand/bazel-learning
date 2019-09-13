@@ -1,2 +1,4 @@
 #!/bin/bash
-echo ${@}
+set -euo pipefail
+external/gcc/usr/bin/gcc "${@}"
+

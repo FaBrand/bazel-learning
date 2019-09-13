@@ -26,60 +26,143 @@ def _impl(ctx):
     cc_target_os = None
     builtin_sysroot = None
 
+    sysroot_feature = feature(
+        name = "sysroot",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = [
+                    ACTION_NAMES.preprocess_assemble,
+                    ACTION_NAMES.linkstamp_compile,
+                    ACTION_NAMES.c_compile,
+                    ACTION_NAMES.cpp_compile,
+                    ACTION_NAMES.cpp_header_parsing,
+                    ACTION_NAMES.cpp_module_compile,
+                    ACTION_NAMES.cpp_module_codegen,
+                    ACTION_NAMES.lto_backend,
+                    ACTION_NAMES.clif_match,
+                    ACTION_NAMES.cpp_link_executable,
+                    ACTION_NAMES.cpp_link_dynamic_library,
+                    ACTION_NAMES.cpp_link_nodeps_dynamic_library,
+                ],
+                flag_groups = [
+                    flag_group(
+                        flags = ["--sysroot=%{sysroot}"],
+                        expand_if_available = "sysroot",
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    toolchain_include_directories_feature = feature(
+        name = "toolchain_include_directories",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = [
+                    ACTION_NAMES.assemble,
+                    ACTION_NAMES.preprocess_assemble,
+                    ACTION_NAMES.linkstamp_compile,
+                    ACTION_NAMES.c_compile,
+                    ACTION_NAMES.cpp_compile,
+                    ACTION_NAMES.cpp_header_parsing,
+                    ACTION_NAMES.cpp_module_compile,
+                    ACTION_NAMES.cpp_module_codegen,
+                    ACTION_NAMES.lto_backend,
+                    ACTION_NAMES.clif_match,
+                ],
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-isystem",
+                            "%{sysroot}/usr/include",
+                            "-isystem",
+                            "%{sysroot}/usr/include/c++/8",
+                            "-isystem",
+                            "%{sysroot}/usr/include/c++/8/backward",
+                            "-isystem",
+                            "%{sysroot}/usr/include/x86_64-linux-gnu/c++/8",
+                            "-isystem",
+                            "%{sysroot}/usr/lib/gcc/x86_64-linux-gnu/8/include",
+                            "-isystem",
+                            "%{sysroot}/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed",
+                        ],
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    features = [
+        sysroot_feature,
+        toolchain_include_directories_feature,
+    ]
+
     tool_paths = [
         tool_path(
             name = "ar",
-            path = "gcc/binwrapper",
+            path = "gcc/ar",
         ),
         tool_path(
             name = "compat-ld",
-            path = "gcc/binwrapper",
+            path = "/bin/false",
         ),
         tool_path(
             name = "cpp",
-            path = "gcc/binwrapper",
+            path = "gcc/cpp",
         ),
         tool_path(
             name = "dwp",
-            path = "gcc/binwrapper",
+            path = "/bin/false",
         ),
         tool_path(
             name = "gcc",
-            path = "gcc/binwrapper",
+            path = "gcc/gcc-tool",
         ),
         tool_path(
             name = "gcov",
-            path = "gcc/binwrapper",
+            path = "/bin/false",
         ),
         tool_path(
             name = "ld",
-            path = "gcc/binwrapper",
+            path = "gcc/ld",
         ),
         tool_path(
             name = "nm",
-            path = "gcc/binwrapper",
+            path = "gcc/nm",
         ),
         tool_path(
             name = "objcopy",
-            path = "gcc/binwrapper",
+            path = "gcc/objcopy",
         ),
         tool_path(
             name = "objdump",
-            path = "gcc/binwrapper",
+            path = "gcc/objdump",
         ),
         tool_path(
             name = "addr2line",
-            path = "gcc/binwrapper",
+            path = "/bin/false",
         ),
         tool_path(
             name = "strip",
-            path = "gcc/binwrapper",
+            path = "/bin/false",
         ),
+    ]
+
+    cxx_builtin_include_directories = [
+        "%sysroot%/usr/include",
+        "%sysroot%/usr/include/c++/8",
+        "%sysroot%/usr/include/c++/8/backward",
+        "%sysroot%/usr/include/x86_64-linux-gnu/c++/8",
+        "%sysroot%/usr/lib/gcc/x86_64-linux-gnu/8/include",
+        "%sysroot%/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed",
     ]
 
     return [
         cc_common.create_cc_toolchain_config_info(
             ctx = ctx,
+            cxx_builtin_include_directories = cxx_builtin_include_directories,
             toolchain_identifier = toolchain_identifier,
             host_system_name = host_system_name,
             target_system_name = target_system_name,
@@ -89,6 +172,8 @@ def _impl(ctx):
             target_cpu = target_cpu,
             target_libc = target_libc,
             tool_paths = tool_paths,
+            features = features,
+            builtin_sysroot = "external/gcc",
         ),
     ]
 

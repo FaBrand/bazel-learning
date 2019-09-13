@@ -4,9 +4,7 @@ package(default_visibility = ["//visibility:public"])
 
 filegroup(
     name = "all_files",
-    srcs = [
-        "gcc/binwrapper",
-    ],
+    srcs = glob(["gcc/*"]) + ["@gcc//:all_files"],
     visibility = ["//visibility:public"],
 )
 
@@ -22,9 +20,9 @@ cc_toolchain_config(
 cc_toolchain(
     name = "cc-gcc",
     all_files = ":all_files",
-    compiler_files = ":empty",
+    compiler_files = ":all_files",
     dwp_files = ":empty",
-    linker_files = ":empty",
+    linker_files = ":all_files",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
