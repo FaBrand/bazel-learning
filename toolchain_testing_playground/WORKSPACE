@@ -1,0 +1,22 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "debian_repository_rules",
+    remote = "https://github.com/fabrand/debian_repository_rules",
+    commit = "50763260c7b9e5f7f503e3f0076508847f1f0878",
+)
+
+load("@debian_repository_rules//:debian.bzl", "debian_archive")
+
+debian_archive(
+    name = "gcc",
+    build_file = "//third_party:BUILD.gcc",
+    urls = {
+        "http://ftp.de.debian.org/debian/pool/main/g/gcc-defaults/gcc_8.3.0-1_amd64.deb": "",
+        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/gcc-8_8.3.0-6_amd64.deb": "",
+        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/gcc-8-base_8.3.0-6_amd64.deb": "",
+        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/cpp-8_8.3.0-6_amd64.deb": "",
+        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libcc1-0_8.3.0-6_amd64.deb": "",
+        "http://ftp.de.debian.org/debian/pool/main/g/glibc/libc6-dev_2.28-10_amd64.deb": "",
+    },
+)
