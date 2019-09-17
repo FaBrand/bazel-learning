@@ -231,18 +231,9 @@ def _impl(ctx):
                     flag_group(
                         flags = [
                             "-lstdc++",
-                            "-Wl",
-                            "-lm",
-                            "-ldl",
-                            "-Wl,-z,relro,-z,now",
                         ],
                     ),
                 ],
-            ),
-            flag_set(
-                actions = all_link_actions,
-                flag_groups = [flag_group(flags = ["-Wl,--gc-sections"])],
-                with_features = [with_feature_set(features = ["opt"])],
             ),
         ],
     )
