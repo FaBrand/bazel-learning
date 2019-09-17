@@ -235,6 +235,29 @@ def _impl(ctx):
         ],
     )
 
+    include_paths_feature = feature(
+        name = "include_paths",
+        flag_sets = [
+            flag_set(
+                actions = all_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = ["-iquote%{quote_include_paths}"],
+                        iterate_over = "quote_include_paths",
+                    ),
+                    flag_group(
+                        flags = ["-I%{include_paths}"],
+                        iterate_over = "include_paths",
+                    ),
+                    flag_group(
+                        flags = ["-isystem%{system_include_paths}"],
+                        iterate_over = "system_include_paths",
+                    ),
+                ],
+            ),
+        ],
+    )
+
     default_link_flags_feature = feature(
         name = "default_link_flags",
         enabled = True,
@@ -255,6 +278,7 @@ def _impl(ctx):
     )
 
     features = [
+        include_paths_feature,
         custom_include_paths_feature,
         default_link_flags_feature,
         dbg_feature,
