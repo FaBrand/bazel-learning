@@ -221,6 +221,20 @@ def _impl(ctx):
         ],
     )
 
+    custom_include_paths_feature = feature(
+        name = "custom_include_paths",
+        flag_sets = [
+            flag_set(
+                actions = all_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = ["-Ifoobar"],
+                    ),
+                ],
+            ),
+        ],
+    )
+
     default_link_flags_feature = feature(
         name = "default_link_flags",
         enabled = True,
@@ -241,6 +255,7 @@ def _impl(ctx):
     )
 
     features = [
+        custom_include_paths_feature,
         default_link_flags_feature,
         dbg_feature,
         opt_feature,
