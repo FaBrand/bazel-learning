@@ -86,7 +86,7 @@ cc_lib = rule(
     attrs = {
         "public_hdrs": attr.label_list(allow_files = [".h"]),
         "private_hdrs": attr.label_list(allow_files = [".h"]),
-        "srcs": attr.label_list(allow_files = [".cc"]),
+        "srcs": attr.label_list(allow_files = [".cc", ".cpp"]),
         "deps": attr.label_list(
             allow_empty = True,
             providers = [[CcInfo]],
@@ -155,13 +155,14 @@ def _cc_bin_impl(ctx):
         DefaultInfo(
             files = depset(_filter_none(files)),
             runfiles = ctx.runfiles(files = ctx.files.data),
+            executable = linking_outputs.executable,
         ),
     ]
 
 cc_bin = rule(
     implementation = _cc_bin_impl,
     attrs = {
-        "srcs": attr.label_list(allow_files = [".cc"]),
+        "srcs": attr.label_list(allow_files = [".cc", ".cpp"]),
         "additional_linker_inputs": attr.label_list(
             allow_empty = True,
             allow_files = [".lds"],
@@ -180,4 +181,5 @@ cc_bin = rule(
         "_cc_toolchain": attr.label(default = "@bazel_tools//tools/cpp:current_cc_toolchain"),
     },
     fragments = ["cpp"],
+    executable = True,
 )
