@@ -15,5 +15,5 @@ def load_dependencies():
         git_repository(
             name = "bazel_compilation_database",
             remote = "https://github.com/grailbio/bazel-compilation-database.git",
-            tag = "0.3.4",
+            tag = "0.4.1",
         )

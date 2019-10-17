@@ -1,27 +1,29 @@
-load("//:legacy_cc_provider.bzl", "get_compile_flags")
+"""
+clang-tidy
+"""
+
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain")
+load("//:legacy_cc_provider.bzl", "get_compile_flags")
 load(
     "@bazel_tools//tools/build_defs/cc:action_names.bzl",
     "CPP_COMPILE_ACTION_NAME",
     "C_COMPILE_ACTION_NAME",
 )
 
-ClangTidyAspect = provider()
+ClangTidyInfo = provider()
 
-_cpp_extensions = [
+_source_extensions = [
     "cc",
     "cpp",
     "cxx",
-]
-
-_enabled_checks = [
-    "*",
-    "cppcoreguidelines-*",
+    "h",
+    "hpp",
+    "hh",
 ]
 
 def _is_cpp_target(srcs):
-    for src in srcs:
-        for extension in _cpp_extensions:
+    for src in srcs.to_list():
+        for extension in _source_extensions:
             if src.extension == extension:
                 return True
     return False
@@ -29,9 +31,8 @@ def _is_cpp_target(srcs):
 def _get_compile_flags(ctx, target, srcs):
     cc_toolchain = find_cpp_toolchain(ctx)
     feature_configuration = cc_common.configure_features(
+        ctx = ctx,
         cc_toolchain = cc_toolchain,
-        requested_features = ctx.features,
-        unsupported_features = ctx.disabled_features,
     )
     compile_variables = cc_common.create_compile_variables(
         feature_configuration = feature_configuration,
@@ -65,58 +66,73 @@ def _get_compile_flags(ctx, target, srcs):
                      get_compile_flags(target) +
                      (ctx.rule.attr.copts if hasattr(ctx.rule.attr, "copts") else []))
 
-    # unknown by clang
+    # Unknown compiler flags by clang - disable those.
     compile_flags.remove("-fno-canonical-system-headers")
+    compile_flags.remove("-Wno-free-nonheap-object")
+    compile_flags.remove("-Wunused-but-set-parameter")
+    compile_flags.append(force_cpp_mode_option)
 
     return compile_flags
 
 def _invoke_clang_tidy(target, ctx):
-    srcs = []
-    if hasattr(ctx.rule.attr, "srcs"):
-        srcs += [f for src in ctx.rule.attr.srcs for f in src.files]
+    srcs = depset(
+        direct =
+            getattr(ctx.rule.files, "srcs", []) +
+            getattr(ctx.rule.files, "hdrs", []),
+    )
+
+    if not srcs:
+        return []
 
     analysis_results = ctx.actions.declare_file(ctx.rule.attr.name + ".clang-tidy.out")
 
     args = ctx.actions.args()
     args.add(ctx.executable._clang_tidy)
     args.add(analysis_results)
-    args.add_joined(
-        "-checks",
-        _enabled_checks,
-        join_with = ",",
-        omit_if_empty = True,
-    )
+
+    args.add("-header-filter=.*")
+
+    # Deactivate header guard, since it will report false findings caused by the execution path of bazel.
+
+    checks = "-checks=" + ctx.var.get("checks", "*,-llvm-header-guard")
+    args.add(checks)
+
+    args.add("-format-style=file")
+
+    if (ctx.var.get("fix")):
+        args.add("-fix")
+        args.add("-fix-errors")
+
     args.add_all(srcs)
+
     args.add("--")
     args.add_all(_get_compile_flags(ctx, target, srcs))
 
-    visible_headers = target[CcInfo].compilation_context.headers.to_list()
+    visible_headers = target[CcInfo].compilation_context.headers
     ctx.actions.run(
-        inputs = srcs + visible_headers,
+        inputs = depset(transitive = [srcs, visible_headers]),
         executable = ctx.executable._command_wrapper,
         tools = [ctx.executable._clang_tidy],
         outputs = [analysis_results],
         arguments = [args],
-        progress_message = "Running clang-tidy on " + ", ".join([src.short_path for src in srcs]),
+        progress_message = "Running clang-tidy on " + ", ".join([src.short_path for src in srcs.to_list()]),
         mnemonic = "ClangTidy",
     )
     return [analysis_results]
 
 def _clang_tidy_aspect_impl(target, ctx):
     srcs_results = []
-    transitive_results = []
-
     if CcInfo in target:
         srcs_results = _invoke_clang_tidy(target, ctx)
 
-    if hasattr(ctx.rule.attr, "deps"):
-        transitive_results = [dep[ClangTidyAspect].results for dep in ctx.rule.attr.deps]
-
     rule_results = depset(
         direct = srcs_results,
-        transitive = transitive_results,
+        transitive = [dep[ClangTidyInfo].results for dep in ctx.rule.attr.deps] if hasattr(ctx.rule.attr, "deps") else [],
     )
-    return [ClangTidyAspect(results = rule_results)]
+    return [
+        ClangTidyInfo(results = rule_results),
+        OutputGroupInfo(ctidy = rule_results),
+    ]
 
 clang_tidy_aspect = aspect(
     attr_aspects = ["deps"],
@@ -136,12 +152,12 @@ clang_tidy_aspect = aspect(
         ),
     },
     fragments = ["cpp"],
-    required_aspect_providers = [ClangTidyAspect],
+    required_aspect_providers = [ClangTidyInfo],
     implementation = _clang_tidy_aspect_impl,
 )
 
 def _clang_tidy_impl(ctx):
-    results = depset(transitive = [t[ClangTidyAspect].results for t in ctx.attr.targets])
+    results = depset(transitive = [target[ClangTidyInfo].results for target in ctx.attr.targets])
 
     args = ctx.actions.args()
     args.add_all(results)

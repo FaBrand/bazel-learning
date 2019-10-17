@@ -9,5 +9,5 @@ bazel build //:clang_tidy_main
 
 To run the analysis from the command line, use:
 ```bash
-bazel build ... --aspects static_analysis/aspect.bzl%clang_tidy_aspect
+bazel build ... --aspects static_analysis/clang_tidy.bzl%clang_tidy_aspect
 ```
