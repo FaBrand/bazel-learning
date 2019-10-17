@@ -1,1 +1,2 @@
 build:clang-tidy --aspects static_analysis/clang_tidy.bzl%clang_tidy_aspect
+build --strategy ClangTidy=local

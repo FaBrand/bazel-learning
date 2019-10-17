@@ -110,7 +110,9 @@ def _invoke_clang_tidy(target, ctx):
 
     visible_headers = target[CcInfo].compilation_context.headers
     ctx.actions.run(
-        inputs = depset(direct = [ctx.file._clang_tidy_config], transitive = [srcs, visible_headers]),
+        # If spawn strategy local is used, the clang tidy config is found from the source tree
+        # inputs = depset(direct = [ctx.file._clang_tidy_config], transitive = [srcs, visible_headers]),
+        inputs = depset(direct = [], transitive = [srcs, visible_headers]),
         executable = ctx.executable._command_wrapper,
         tools = [ctx.executable._clang_tidy],
         outputs = [analysis_results],
