@@ -1,7 +1,8 @@
 #include "source1.hpp"
 // #include <iostream>
 
-Source1::Source1(){
+Source1::Source1()
+{
     // std::cout << "Hello";
 }
 
@@ -13,3 +14,4 @@ void Source1::HelloWorld() const
     a = b;
     a++;
 }
+void Source1::HelloWorld2() const {}

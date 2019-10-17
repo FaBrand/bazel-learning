@@ -3,9 +3,12 @@
 
 class Source1
 {
-public:
+  public:
     Source1();
     void HelloWorld() const;
+
+  private:
+    void HelloWorld2() const;
 };
 
 #endif /* SOURCE1_H */
