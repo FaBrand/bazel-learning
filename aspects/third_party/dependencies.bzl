@@ -6,9 +6,9 @@ def load_dependencies():
         http_archive(
             name = "clang",
             build_file = "//third_party:BUILD.clang",
-            sha256 = "e74ce06d99ed9ce42898e22d2a966f71ae785bdf4edbded93e628d696858921a",
-            strip_prefix = "clang+llvm-7.0.1-x86_64-linux-gnu-ubuntu-18.04/bin",
-            url = "https://releases.llvm.org/7.0.1/clang+llvm-7.0.1-x86_64-linux-gnu-ubuntu-18.04.tar.xz",
+            sha256 = "a23b082b30c128c9831dbdd96edad26b43f56624d0ad0ea9edec506f5385038d",
+            strip_prefix = "clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/bin",
+            url = "http://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz",
         )
 
     if "bazel_compilation_database" not in native.existing_rules():
