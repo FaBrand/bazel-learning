@@ -1,49 +1,68 @@
-# Learning:
-# this Config is not triggered by the --config=simple passed via the command line
-# it triggers once the defines match the values
-#
-# e.g. bazel test //... --define main=0
-#
-# The --config option only selects the appropriate calls which are stored in the .bazelrc
-
 config_setting(
-    name = "simple",
+    name = "succeed",
     define_values = {
-            "main": "0"
+        "test_outcome": "succeed",
     },
 )
 
 config_setting(
-    name = "simple1",
+    name = "fail",
     define_values = {
-            "main": "1"
+        "test_outcome": "fail",
     },
 )
 
+config_setting(
+    name = "override",
+    define_values = {
+        "override": "",
+    },
+)
 
 cc_library(
-    name = "main_0",
+    name = "succeding_test",
     srcs = glob(["src/main_0.c", "include/*.h"]),
     hdrs = glob(["include/*.h"]),
     strip_include_prefix = "include",
 )
 
 cc_library(
-    name = "main_1",
+    name = "failing_test",
     srcs = glob(["src/main_1.c", "include/*.h"]),
     hdrs = glob(["include/*.h"]),
     strip_include_prefix = "include",
 )
 
+cc_library(
+    name = "other_failing_test",
+    srcs = glob(["src/main_2.c", "include/*.h"]),
+    hdrs = glob(["include/*.h"]),
+    strip_include_prefix = "include",
+)
+
+cc_library(
+    name = "default_proxy",
+    deps = select({
+        ":succeed": [":succeding_test"],
+        ":fail": [":failing_test"],
+    }),
+)
+cc_library(
+    name = "override_proxy",
+    deps = select({
+        ":succeed": [":other_failing_test"],
+        ":fail": [":other_failing_test"],
+    }),
+)
 
 cc_test(
     name = "foo_test",
     srcs = glob(["test/*.cpp", "test/*.h"]),
     deps = [
-            "@gtest//:gtest",
-            "@gtest//:gtest_main",
-            ] + select({
-                    ":simple" : [":main_0"] ,
-                    ":simple1" : [":main_1"] ,
-                })
+        "@gtest//:gtest",
+        "@gtest//:gtest_main",
+    ] + select({
+        ":override": [":override_proxy"],
+        "//conditions:default": [":default_proxy"],
+    }),
 )
