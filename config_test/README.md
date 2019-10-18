@@ -7,6 +7,7 @@ By switching to the other libraries, the test fails, as the functions don't retu
 # Learning:
 This Config is not triggered by the --config=fail passed via the command line
 it triggers once the defines match the values.
+The --config option only selects the appropriate calls which are stored in the .bazelrc
 
 
 With this the test fails
@@ -23,6 +24,3 @@ With this the test fails again, but for a different reason.
 ```
 bazel test //... --define test_outcome=succeed --define override=
 ```
-
-The --config option only selects the appropriate calls which are stored in the .bazelrc
-
