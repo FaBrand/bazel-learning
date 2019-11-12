@@ -18,7 +18,7 @@ cc_toolchain_config(
 )
 
 cc_toolchain(
-    name = "cc-gcc",
+    name = "cc-gcc-linux",
     all_files = ":all_files",
     compiler_files = ":all_files",
     dwp_files = ":empty",
@@ -30,11 +30,18 @@ cc_toolchain(
     visibility = ["//visibility:public"],
 )
 
-cc_toolchain_suite(
-    name = "cc-toolchain",
-    toolchains = {
-        "k8": ":cc-gcc",
-    },
+toolchain(
+    name = "cc-toolchain-x64_linux_gcc",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    target_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+    toolchain = ":cc-gcc-linux",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
 )
 
 cc_binary(

@@ -1,1 +1,0 @@
-build --crosstool_top=//:cc-toolchain

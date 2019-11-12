@@ -26,3 +26,7 @@ debian_archive(
         "http://ftp.de.debian.org/debian/pool/main/l/linux/linux-libc-dev_4.9.189-3_amd64.deb": "0ff40723914098bc1a569fbeb400b0960f3a800c2e1c6738e609e08d1486bb03",
     },
 )
+
+register_toolchains(
+    "//:cc-toolchain-x64_linux_gcc",
+)
