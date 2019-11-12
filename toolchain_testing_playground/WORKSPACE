@@ -28,5 +28,5 @@ debian_archive(
 )
 
 register_toolchains(
-    "//:cc-toolchain-x64_linux_gcc",
+    "//:cc-x64_linux_gcc",
 )
