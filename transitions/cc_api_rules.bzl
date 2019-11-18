@@ -159,6 +159,15 @@ def _cc_bin_impl(ctx):
         ),
     ]
 
+def _cc_bin_transition_impl(settings, attr):
+    return {"//command_line_option:copt": settings["//command_line_option:copt"] + attr.copt}
+
+_cc_bin_transition = transition(
+    implementation = _cc_bin_transition_impl,
+    inputs = ["//command_line_option:copt"],
+    outputs = ["//command_line_option:copt"],
+)
+
 cc_bin = rule(
     implementation = _cc_bin_impl,
     attrs = {
@@ -176,10 +185,13 @@ cc_bin = rule(
             allow_files = True,
         ),
         "user_link_flags": attr.string_list(),
+        "copt": attr.string_list(),
         "linkstatic": attr.bool(default = True),
         "linkshared": attr.bool(default = False),
         "_cc_toolchain": attr.label(default = "@bazel_tools//tools/cpp:current_cc_toolchain"),
+        "_whitelist_function_transition": attr.label(default = Label("//tools/whitelists/function_transition_whitelist:function_transition_whitelist")),  #this path is hard coded by bazel
     },
+    cfg = _cc_bin_transition,
     fragments = ["cpp"],
     executable = True,
 )
