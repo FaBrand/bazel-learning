@@ -1,0 +1,16 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# Abseil
+http_archive(
+    name = "com_google_absl",
+    sha256 = "d5dcbef22d30d89e2ce61fffa3e4308b760aa2197c875ddcec014d11841b1ef2",
+    strip_prefix = "abseil-cpp-master",
+    urls = ["https://github.com/abseil/abseil-cpp/archive/master.zip"],
+)
+
+git_repository(
+    name = "googletest",
+    remote = "https://github.com/google/googletest",
+    tag = "release-1.8.1",
+)
