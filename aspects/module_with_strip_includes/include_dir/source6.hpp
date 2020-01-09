@@ -5,6 +5,10 @@ class Source6
 {
   public:
     Source6();
+    void method()
+    {
+        long c{};
+    };
 };
 
 #endif /* SOURCE5_H */

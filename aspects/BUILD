@@ -5,12 +5,12 @@ exports_files([".clang-tidy"])
 
 clang_tidy(
     name = "clang_tidy_main",
-    targets = ["//main"],
+    targets = ["//module_with_strip_includes:lib"],
     visibility = ["//visibility:public"],
 )
 
 compilation_database(
     name = "comp_db",
-    targets = ["//main"],
+    targets = ["//module_with_strip_includes:lib"],
     visibility = ["//visibility:public"],
 )
