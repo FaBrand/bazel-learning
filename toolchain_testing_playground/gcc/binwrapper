@@ -1,4 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-external/gcc/usr/bin/gcc "${@}"
-

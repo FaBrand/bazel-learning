@@ -10,6 +10,7 @@ load(
     "flag_set",
     "tool",
     "tool_path",
+    "variable_with_value",
     "with_feature_set",
 )
 load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
@@ -196,7 +197,7 @@ def _impl(ctx):
                     ACTION_NAMES.lto_backend,
                     ACTION_NAMES.clif_match,
                 ],
-                flag_groups = [flag_group(flags = ["-std=c++14"])],
+                flag_groups = [flag_group(flags = ["-std=c++0x"])],
             ),
         ],
     )
@@ -277,13 +278,170 @@ def _impl(ctx):
         ],
     )
 
+    output_execpath_flags_feature = feature(
+        name = "output_execpath_flags",
+        flag_sets = [
+            flag_set(
+                actions = all_link_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = ["-o", "%{output_execpath}"],
+                        expand_if_available = "output_execpath",
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    libraries_to_link_feature = feature(
+        name = "libraries_to_link",
+        flag_sets = [
+            flag_set(
+                actions = all_link_actions,
+                flag_groups = [
+                    flag_group(
+                        iterate_over = "libraries_to_link",
+                        flag_groups = [
+                            flag_group(
+                                flags = ["-Wl,--start-lib"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file_group",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["-Wl,-whole-archive"],
+                                expand_if_true =
+                                    "libraries_to_link.is_whole_archive",
+                            ),
+                            flag_group(
+                                flags = ["%{libraries_to_link.object_files}"],
+                                iterate_over = "libraries_to_link.object_files",
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file_group",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "interface_library",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "static_library",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["-l%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "dynamic_library",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["-l:%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "versioned_dynamic_library",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["-Wl,-no-whole-archive"],
+                                expand_if_true = "libraries_to_link.is_whole_archive",
+                            ),
+                            flag_group(
+                                flags = ["-Wl,--end-lib"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file_group",
+                                ),
+                            ),
+                        ],
+                        expand_if_available = "libraries_to_link",
+                    ),
+                    flag_group(
+                        flags = ["-Wl,@%{thinlto_param_file}"],
+                        expand_if_true = "thinlto_param_file",
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    archiver_flags_feature = feature(
+        name = "archiver_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = [ACTION_NAMES.cpp_link_static_library],
+                flag_groups = [
+                    flag_group(flags = ["rcsD"]),
+                    flag_group(
+                        flags = ["%{output_execpath}"],
+                        expand_if_available = "output_execpath",
+                    ),
+                ],
+            ),
+            flag_set(
+                actions = [ACTION_NAMES.cpp_link_static_library],
+                flag_groups = [
+                    flag_group(
+                        iterate_over = "libraries_to_link",
+                        flag_groups = [
+                            flag_group(
+                                flags = ["%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["%{libraries_to_link.object_files}"],
+                                iterate_over = "libraries_to_link.object_files",
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file_group",
+                                ),
+                            ),
+                        ],
+                        expand_if_available = "libraries_to_link",
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    no_legacy_features = feature(name = "no_legacy_features")
+
     compiler_param_file_feature = feature(
         name = "compiler_param_file",
+        enabled = True,
+    )
+
+    linker_param_file_feature = feature(
+        name = "linker_param_file",
+        enabled = False,
     )
 
     features = [
+        linker_param_file_feature,
         compiler_param_file_feature,
+        archiver_flags_feature,
+        libraries_to_link_feature,
         include_paths_feature,
+        output_execpath_flags_feature,
         custom_include_paths_feature,
         default_link_flags_feature,
         dbg_feature,
@@ -293,12 +451,13 @@ def _impl(ctx):
         user_compile_flags_feature,
         unfiltered_compile_flags_feature,
         default_compile_flags_feature,
+        # no_legacy_features,
     ]
 
     tool_paths = [
         tool_path(
             name = "ar",
-            path = "gcc/ar",
+            path = "external/gcc/usr/bin/gcc-ar",
         ),
         tool_path(
             name = "compat-ld",
@@ -306,7 +465,7 @@ def _impl(ctx):
         ),
         tool_path(
             name = "cpp",
-            path = "gcc/cpp",
+            path = "external/gcc/usr/bin/gcc",
         ),
         tool_path(
             name = "dwp",
@@ -314,27 +473,27 @@ def _impl(ctx):
         ),
         tool_path(
             name = "gcc",
-            path = "gcc/gcc-tool",
+            path = "external/gcc/usr/bin/gcc",
         ),
         tool_path(
             name = "gcov",
-            path = "/bin/false",
+            path = "external/gcc/usr/bin/gcov",
         ),
         tool_path(
             name = "ld",
-            path = "gcc/ld",
+            path = "external/gcc/usr/bin/gcc",
         ),
         tool_path(
             name = "nm",
-            path = "gcc/nm",
+            path = "external/gcc/usr/bin/gcc-nm",
         ),
         tool_path(
             name = "objcopy",
-            path = "gcc/objcopy",
+            path = "/bin/false",
         ),
         tool_path(
             name = "objdump",
-            path = "gcc/objdump",
+            path = "/bin/false",
         ),
         tool_path(
             name = "addr2line",
@@ -347,6 +506,7 @@ def _impl(ctx):
     ]
 
     cxx_builtin_include_directories = [
+        "%sysroot%/",
         "%sysroot%/usr/include/c++/8",
         "%sysroot%/usr/include/x86_64-linux-gnu",
         "%sysroot%/usr/include/c++/8/backward",

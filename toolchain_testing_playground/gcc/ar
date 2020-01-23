@@ -1,1 +1,0 @@
-gcc/binwrapper ${@} 1 ↵
