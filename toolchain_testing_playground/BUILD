@@ -26,7 +26,7 @@ cc_toolchain(
     linker_files = ":all_files",
     objcopy_files = ":empty",
     strip_files = ":empty",
-    supports_param_files = 1,
+    supports_param_files = 0,
     toolchain_config = ":cc-toolchain-config",
     visibility = ["//visibility:public"],
 )
@@ -43,25 +43,6 @@ toolchain(
     ],
     toolchain = ":cc-toolchain-x64_linux_gcc",
     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
-)
-
-cc_library(
-    name = "other",
-    srcs = [],
-)
-
-cc_library(
-    name = "lib",
-    srcs = ["lib.cpp"],
-)
-
-cc_binary(
-    name = "main",
-    srcs = ["main.cpp"],
-    deps = [
-        ":lib",
-        ":other",
-    ],
 )
 
 # vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab ft=bzl:

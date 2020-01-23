@@ -1,6 +1,9 @@
 filegroup(
     name = "all_files",
-    srcs = glob(["usr/**/*"]),
+    srcs = glob(
+        ["usr/**/*"],
+        exclude = ["usr/share/**/*"],
+    ),
     visibility = ["//visibility:public"],
 )
 

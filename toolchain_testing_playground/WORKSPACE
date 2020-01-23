@@ -2,7 +2,7 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 git_repository(
     name = "debian_repository_rules",
-    commit = "50763260c7b9e5f7f503e3f0076508847f1f0878",
+    commit = "3f80031c3ccee36931400323f452f569b8046966",
     remote = "https://github.com/fabrand/debian_repository_rules",
 )
 
@@ -24,6 +24,12 @@ debian_archive(
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-defaults/gcc_8.3.0-1_amd64.deb": "c472cc849c02f03522b44e12191b6dfde496afa2a53b862f9b913dc2ae218f70",
         "http://ftp.de.debian.org/debian/pool/main/g/glibc/libc6-dev_2.24-11+deb9u4_amd64.deb": "3e7655930adc6ed69ddb1c263ef6fa428590e19479863785adc723367f6bf21d",
         "http://ftp.de.debian.org/debian/pool/main/l/linux/linux-libc-dev_4.9.189-3_amd64.deb": "0ff40723914098bc1a569fbeb400b0960f3a800c2e1c6738e609e08d1486bb03",
+        # binutils
+        "http://ftp.de.debian.org/debian/pool/main/b/binutils/binutils_2.31.1-16_amd64.deb": "c2696ba3984dd2fc90bacb01c3bbb6c5f4477bcabbc90fa084cb9fe971b66d6d",
+        "http://ftp.de.debian.org/debian/pool/main/b/binutils/binutils-x86-64-linux-gnu_2.31.1-16_amd64.deb": "c1da1cffff8a024b5eca0a6795558d9e0ec88fbd24fe059490dc665dc5cac92f",
+        "http://ftp.de.debian.org/debian/pool/main/b/binutils/binutils-common_2.31.1-16_amd64.deb": "95c39f813e7c99f93d7de3bab571f4c2f52c917a64d4dc33be8ef7c4dad14adb",
+        "http://ftp.de.debian.org/debian/pool/main/b/binutils/libbinutils_2.31.1-16_amd64.deb": "bae88af666531b3b46a5c1b54f699e7354264e6fc1654b02bb537f2076694b05",
+        "http://ftp.de.debian.org/debian/pool/main/z/zlib/zlib1g_1.2.11.dfsg-1_amd64.deb": "61bc9085aadd3007433ce6f560a08446a3d3ceb0b5e061db3fc62c42fbfe3eff",
     },
 )
 
