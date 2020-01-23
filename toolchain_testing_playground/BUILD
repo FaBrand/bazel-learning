@@ -26,7 +26,7 @@ cc_toolchain(
     linker_files = ":all_files",
     objcopy_files = ":empty",
     strip_files = ":empty",
-    supports_param_files = 0,
+    supports_param_files = 1,
     toolchain_config = ":cc-toolchain-config",
     visibility = ["//visibility:public"],
 )

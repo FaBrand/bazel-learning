@@ -556,8 +556,35 @@ def _impl(ctx):
     supports_dynamic_linker_feature = feature(name = "supports_dynamic_linker", enabled = False)
     supports_pic_feature = feature(name = "supports_pic", enabled = False)
     supports_start_end_lib_feature = feature(name = "supports_start_end_lib", enabled = False)
-    compiler_param_file_feature = feature(name = "compiler_param_file", enabled = False)
-    linker_param_file_feature = feature(name = "linker_param_file", enabled = False)
+    compiler_param_file_feature = feature(
+        name = "compiler_param_file",
+        flag_sets = [
+            flag_set(
+                actions = all_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = ["@%{compiler_param_file}"],
+                        expand_if_available = "compiler_param_file",
+                    ),
+                ],
+            ),
+        ],
+    )
+    linker_param_file_feature = feature(
+        name = "linker_param_file",
+        flag_sets = [
+            flag_set(
+                actions = all_link_actions +
+                          [ACTION_NAMES.cpp_link_static_library],
+                flag_groups = [
+                    flag_group(
+                        flags = ["@%{linker_param_file}"],
+                        expand_if_available = "linker_param_file",
+                    ),
+                ],
+            ),
+        ],
+    )
     no_stripping_feature = feature(name = "no_stripping")
     no_legacy_features = feature(name = "no_legacy_features")
 
