@@ -277,7 +277,12 @@ def _impl(ctx):
         ],
     )
 
+    compiler_param_file_feature = feature(
+        name = "compiler_param_file",
+    )
+
     features = [
+        compiler_param_file_feature,
         include_paths_feature,
         custom_include_paths_feature,
         default_link_flags_feature,
