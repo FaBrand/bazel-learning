@@ -151,6 +151,7 @@ def _impl(ctx):
                             "-fno-canonical-system-headers",
                             "-Wno-error=deprecated-declarations",
                             "-Wno-error=cpp",
+                            "-pass-exit-codes",
                         ],
                     ),
                 ],
@@ -265,9 +266,13 @@ def _impl(ctx):
                 flag_groups = [
                     flag_group(
                         flags = [
+                            "-fuse-ld=gold",
+                            "-pass-exit-codes",
+                            "-Wl,-no-as-needed",
+                            "-Wl,-z,relro,-z,now",
                             "-lstdc++",
                             "-lm",
-                            "-ldl",
+                            # "-ldl",
                         ],
                     ),
                 ],
@@ -642,9 +647,29 @@ def _impl(ctx):
         ],
     )
 
+    pic_feature = feature(
+        name = "pic",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = [
+                    ACTION_NAMES.assemble,
+                    ACTION_NAMES.preprocess_assemble,
+                    ACTION_NAMES.linkstamp_compile,
+                    ACTION_NAMES.c_compile,
+                    ACTION_NAMES.cpp_compile,
+                    ACTION_NAMES.cpp_module_codegen,
+                    ACTION_NAMES.cpp_module_compile,
+                ],
+                flag_groups = [
+                    flag_group(flags = ["-fPIC"], expand_if_available = "pic"),
+                ],
+            ),
+        ],
+    )
     supports_dynamic_linker_feature = feature(name = "supports_dynamic_linker", enabled = True)
     supports_pic_feature = feature(name = "supports_pic", enabled = True)
-    supports_start_end_lib_feature = feature(name = "supports_start_end_lib", enabled = False)
+    supports_start_end_lib_feature = feature(name = "supports_start_end_lib", enabled = True)
     compiler_param_file_feature = feature(
         name = "compiler_param_file",
         flag_sets = [
@@ -674,8 +699,46 @@ def _impl(ctx):
             ),
         ],
     )
+
+    preprocessor_defines_feature = feature(
+        name = "preprocessor_defines",
+        flag_sets = [
+            flag_set(
+                actions = [
+                    ACTION_NAMES.preprocess_assemble,
+                    ACTION_NAMES.linkstamp_compile,
+                    ACTION_NAMES.c_compile,
+                    ACTION_NAMES.cpp_compile,
+                    ACTION_NAMES.cpp_header_parsing,
+                    ACTION_NAMES.cpp_module_compile,
+                    ACTION_NAMES.clif_match,
+                ],
+                flag_groups = [
+                    flag_group(
+                        flags = ["-D%{preprocessor_defines}"],
+                        iterate_over = "preprocessor_defines",
+                    ),
+                ],
+            ),
+        ],
+    )
     no_stripping_feature = feature(name = "no_stripping")
     no_legacy_features = feature(name = "no_legacy_features")
+
+    strip_debug_symbols_feature = feature(
+        name = "strip_debug_symbols",
+        flag_sets = [
+            flag_set(
+                actions = all_link_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = ["-Wl,-S"],
+                        expand_if_available = "strip_debug_symbols",
+                    ),
+                ],
+            ),
+        ],
+    )
 
     features = [
         # Common Features
@@ -684,6 +747,10 @@ def _impl(ctx):
         supports_dynamic_linker_feature,
         supports_pic_feature,
         supports_start_end_lib_feature,
+        dbg_feature,
+        opt_feature,
+        sysroot_feature,
+        no_legacy_features,
         # Param Files
         compiler_param_file_feature,
         linker_param_file_feature,
@@ -692,7 +759,10 @@ def _impl(ctx):
         compiler_input_flags_feature,
         compiler_output_flags_feature,
         user_compile_flags_feature,
+        preprocessor_defines_feature,
         unfiltered_compile_flags_feature,
+        pic_feature,
+        include_paths_feature,
         # Linker related features
         shared_flag_feature,
         default_link_flags_feature,
@@ -700,14 +770,10 @@ def _impl(ctx):
         archiver_flags_feature,
         input_param_flags_feature,
         runtime_library_search_directories_feature,
-        # include_paths_feature,
+        strip_debug_symbols_feature,
+        output_execpath_flags_feature,
         # custom_include_paths_feature,
         # toolchain_include_directories_feature,
-        # dbg_feature,
-        # opt_feature,
-        output_execpath_flags_feature,
-        sysroot_feature,
-        no_legacy_features,
     ]
 
     cxx_builtin_include_directories = [

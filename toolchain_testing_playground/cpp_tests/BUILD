@@ -88,3 +88,15 @@ cc_test(
         ":other",
     ],
 )
+
+cc_binary(
+    name = "define_test",
+    srcs = ["define_test.cpp"],
+    defines = ["THIS_IS_A_DEFINE"],
+)
+
+cc_binary(
+    name = "include_test",
+    srcs = ["include_test.cpp"],
+    deps = ["//cpp_tests/sub_package:header_library"],
+)

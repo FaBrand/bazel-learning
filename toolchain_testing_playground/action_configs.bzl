@@ -33,6 +33,7 @@ def declare_actions():
             # "has_configured_linker_path",
             # Not for gcc
             # "def_file",
+            "strip_debug_symbols",
         ],
         tools = [tool(path = "external/gcc/usr/bin/gcc")],
     )
@@ -87,6 +88,8 @@ def declare_actions():
             "gcc_env",
             # Not for gcc
             # "parse_showincludes",
+            "preprocessor_defines",
+            "include_paths",
             "user_compile_flags",
             "sysroot",
             "unfiltered_compile_flags",
@@ -108,6 +111,8 @@ def declare_actions():
             "user_compile_flags",
             "sysroot",
             "unfiltered_compile_flags",
+            "preprocessor_defines",
+            "include_paths",
         ],
         tools = [tool(path = "external/gcc/usr/bin/g++")],
     )
@@ -123,6 +128,7 @@ def declare_actions():
             "input_param_flags",
             "user_link_flags",
             "default_link_flags",
+            "strip_debug_symbols",
             # Not for gcc
             # "linker_subsystem_flag",
             "linker_param_file",
