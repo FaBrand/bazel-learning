@@ -1,0 +1,1 @@
+echo "Called other script"
