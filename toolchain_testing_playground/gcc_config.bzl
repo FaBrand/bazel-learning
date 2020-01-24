@@ -293,18 +293,6 @@ def _impl(ctx):
     input_param_flags_feature = feature(
         name = "input_param_flags",
         flag_sets = [
-            # flag_set(
-            #     actions = [
-            #         ACTION_NAMES.cpp_link_dynamic_library,
-            #         ACTION_NAMES.cpp_link_nodeps_dynamic_library,
-            #     ],
-            #     flag_groups = [
-            #         flag_group(
-            #             flags = ["/IMPLIB:%{interface_library_output_path}"],
-            #             expand_if_available = "interface_library_output_path",
-            #         ),
-            #     ],
-            # ),
             flag_set(
                 actions = all_link_actions,
                 flag_groups = [
@@ -316,52 +304,93 @@ def _impl(ctx):
                 ],
             ),
             flag_set(
-                actions = all_link_actions +
-                          [ACTION_NAMES.cpp_link_static_library],
+                actions = all_link_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = ["-L%{library_search_directories}"],
+                        iterate_over = "library_search_directories",
+                        expand_if_available = "library_search_directories",
+                    ),
+                ],
+            ),
+            flag_set(
+                actions = all_link_actions,
                 flag_groups = [
                     flag_group(
                         iterate_over = "libraries_to_link",
                         flag_groups = [
                             flag_group(
-                                iterate_over = "libraries_to_link.object_files",
-                                flag_groups = [flag_group(flags = ["%{libraries_to_link.object_files}"])],
+                                flags = ["-Wl,--start-lib"],
                                 expand_if_equal = variable_with_value(
                                     name = "libraries_to_link.type",
                                     value = "object_file_group",
                                 ),
                             ),
                             flag_group(
-                                flag_groups = [flag_group(flags = ["%{libraries_to_link.name}"])],
+                                flags = ["-Wl,-whole-archive"],
+                                expand_if_true =
+                                    "libraries_to_link.is_whole_archive",
+                            ),
+                            flag_group(
+                                flags = ["%{libraries_to_link.object_files}"],
+                                iterate_over = "libraries_to_link.object_files",
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file_group",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["%{libraries_to_link.name}"],
                                 expand_if_equal = variable_with_value(
                                     name = "libraries_to_link.type",
                                     value = "object_file",
                                 ),
                             ),
                             flag_group(
-                                flag_groups = [flag_group(flags = ["%{libraries_to_link.name}"])],
+                                flags = ["%{libraries_to_link.name}"],
                                 expand_if_equal = variable_with_value(
                                     name = "libraries_to_link.type",
                                     value = "interface_library",
                                 ),
                             ),
                             flag_group(
-                                flag_groups = [
-                                    flag_group(
-                                        flags = ["%{libraries_to_link.name}"],
-                                        expand_if_false = "libraries_to_link.is_whole_archive",
-                                    ),
-                                    flag_group(
-                                        flags = ["/WHOLEARCHIVE:%{libraries_to_link.name}"],
-                                        expand_if_true = "libraries_to_link.is_whole_archive",
-                                    ),
-                                ],
+                                flags = ["%{libraries_to_link.name}"],
                                 expand_if_equal = variable_with_value(
                                     name = "libraries_to_link.type",
                                     value = "static_library",
                                 ),
                             ),
+                            flag_group(
+                                flags = ["-l%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "dynamic_library",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["-l:%{libraries_to_link.name}"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "versioned_dynamic_library",
+                                ),
+                            ),
+                            flag_group(
+                                flags = ["-Wl,-no-whole-archive"],
+                                expand_if_true = "libraries_to_link.is_whole_archive",
+                            ),
+                            flag_group(
+                                flags = ["-Wl,--end-lib"],
+                                expand_if_equal = variable_with_value(
+                                    name = "libraries_to_link.type",
+                                    value = "object_file_group",
+                                ),
+                            ),
                         ],
                         expand_if_available = "libraries_to_link",
+                    ),
+                    flag_group(
+                        flags = ["-Wl,@%{thinlto_param_file}"],
+                        expand_if_true = "thinlto_param_file",
                     ),
                 ],
             ),
@@ -518,7 +547,12 @@ def _impl(ctx):
         name = "shared_flag",
         flag_sets = [
             flag_set(
-                actions = [ACTION_NAMES.cpp_link_dynamic_library],
+                actions = [
+                    ACTION_NAMES.cpp_link_dynamic_library,
+                    ACTION_NAMES.cpp_link_nodeps_dynamic_library,
+                    ACTION_NAMES.lto_index_for_dynamic_library,
+                    ACTION_NAMES.lto_index_for_nodeps_dynamic_library,
+                ],
                 flag_groups = [
                     flag_group(
                         flags = ["-shared"],
@@ -553,8 +587,63 @@ def _impl(ctx):
         ],
     )
 
-    supports_dynamic_linker_feature = feature(name = "supports_dynamic_linker", enabled = False)
-    supports_pic_feature = feature(name = "supports_pic", enabled = False)
+    runtime_library_search_directories_feature = feature(
+        name = "runtime_library_search_directories",
+        flag_sets = [
+            flag_set(
+                actions = all_link_actions,
+                flag_groups = [
+                    flag_group(
+                        iterate_over = "runtime_library_search_directories",
+                        flag_groups = [
+                            flag_group(
+                                flags = [
+                                    "-Wl,-rpath,$EXEC_ORIGIN/%{runtime_library_search_directories}",
+                                ],
+                                expand_if_true = "is_cc_test",
+                            ),
+                            flag_group(
+                                flags = [
+                                    "-Wl,-rpath,$ORIGIN/%{runtime_library_search_directories}",
+                                ],
+                                expand_if_false = "is_cc_test",
+                            ),
+                        ],
+                        expand_if_available =
+                            "runtime_library_search_directories",
+                    ),
+                ],
+                with_features = [
+                    with_feature_set(features = ["static_link_cpp_runtimes"]),
+                ],
+            ),
+            flag_set(
+                actions = all_link_actions,
+                flag_groups = [
+                    flag_group(
+                        iterate_over = "runtime_library_search_directories",
+                        flag_groups = [
+                            flag_group(
+                                flags = [
+                                    "-Wl,-rpath,$ORIGIN/%{runtime_library_search_directories}",
+                                ],
+                            ),
+                        ],
+                        expand_if_available =
+                            "runtime_library_search_directories",
+                    ),
+                ],
+                with_features = [
+                    with_feature_set(
+                        not_features = ["static_link_cpp_runtimes"],
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    supports_dynamic_linker_feature = feature(name = "supports_dynamic_linker", enabled = True)
+    supports_pic_feature = feature(name = "supports_pic", enabled = True)
     supports_start_end_lib_feature = feature(name = "supports_start_end_lib", enabled = False)
     compiler_param_file_feature = feature(
         name = "compiler_param_file",
@@ -610,6 +699,7 @@ def _impl(ctx):
         user_link_flags_feature,
         archiver_flags_feature,
         input_param_flags_feature,
+        runtime_library_search_directories_feature,
         # include_paths_feature,
         # custom_include_paths_feature,
         # toolchain_include_directories_feature,

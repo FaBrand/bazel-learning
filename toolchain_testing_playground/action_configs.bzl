@@ -19,14 +19,14 @@ def declare_actions():
             # "nologo",
             "shared_flag",
             # "linkstamps",
+            "runtime_library_search_directories",
             "output_execpath_flags",
             "input_param_flags",
             "user_link_flags",
             "default_link_flags",
             # Not for gcc
             # "linker_subsystem_flag",
-            #Disabled
-            #"linker_param_file",
+            "linker_param_file",
             "gcc_env",
             "no_stripping",
             # Not for gcc
@@ -44,8 +44,7 @@ def declare_actions():
             # "nologo",
             "archiver_flags",
             "input_param_flags",
-            #Disabled
-            # "linker_param_file",
+            "linker_param_file",
             "gcc_env",
         ],
         tools = [tool(path = "external/gcc/usr/bin/ar")],
@@ -119,6 +118,7 @@ def declare_actions():
             # Not for gcc
             # "nologo",
             # "linkstamps",
+            "runtime_library_search_directories",
             "output_execpath_flags",
             "input_param_flags",
             "user_link_flags",
@@ -145,8 +145,7 @@ def declare_actions():
             "default_link_flags",
             # Not for gcc
             # "linker_subsystem_flag",
-            #Disabled
-            #"linker_param_file",
+            "linker_param_file",
             "gcc_env",
             "no_stripping",
             # Not for gcc
