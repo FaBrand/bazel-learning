@@ -45,6 +45,24 @@ filegroup(
 
 filegroup(
     name = "linker_files",
-    srcs = [],
+    srcs = [
+        #GCC
+        "usr/bin/gcc",
+        "usr/bin/gcc-8",
+        "usr/bin/x86_64-linux-gnu-gcc-8",
+        #GNULD
+        "usr/bin/gold",
+        "usr/bin/ld.gold",
+        "usr/bin/x86_64-linux-gnu-gold",
+        "usr/bin/x86_64-linux-gnu-ld.gold",
+        "usr/lib/gold-ld/ld",
+        "usr/lib/x86_64-linux-gnu/libbfd-2.31.1-system.so",
+        #GOLD
+        "usr/bin/ld",
+        "usr/bin/ld.bfd",
+        "usr/bin/x86_64-linux-gnu-ld",
+        "usr/bin/x86_64-linux-gnu-ld.bfd",
+        "usr/lib/compat-ld/ld",
+    ],
 )
 # vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab ft=bzl:

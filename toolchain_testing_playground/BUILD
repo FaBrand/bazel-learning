@@ -17,7 +17,7 @@ cc_toolchain(
     ar_files = "@gcc//:ar_files",
     compiler_files = "@gcc//:compiler_files",
     dwp_files = ":empty",
-    linker_files = "@gcc//:all_files",
+    linker_files = "@gcc//:linker_files",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,
