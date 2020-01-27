@@ -1,3 +1,10 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@//third_party:libstdcpp8_files.bzl", _LIBSTDCPP_HEADER = "HEADERS")
+load("@//third_party:libc6dev_files.bzl", _LIBC_HEADER = "HEADERS")
+load("@//third_party:libgcc8_dev.bzl", _LIBGCC_HEADER = "HEADERS")
+load("@//third_party:linuxlibcdev_files.bzl", _LINUXLIBC_HEADER = "HEADERS")
+
 filegroup(
     name = "all_files",
     srcs = glob(
@@ -7,4 +14,34 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+filegroup(
+    name = "includes",
+    srcs = _LIBC_HEADER + _LIBSTDCPP_HEADER + _LIBGCC_HEADER + _LINUXLIBC_HEADER,
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "compiler_files",
+    srcs = [
+        "usr/bin/as",
+        "usr/bin/g++",
+        "usr/bin/g++-8",
+        "usr/bin/x86_64-linux-gnu-as",
+        "usr/bin/x86_64-linux-gnu-g++-8",
+        "usr/lib/gcc/x86_64-linux-gnu/8/cc1plus",
+        "usr/lib/x86_64-linux-gnu/libbfd-2.31.1-system.so",
+        "usr/lib/x86_64-linux-gnu/libopcodes-2.31.1-system.so",
+        ":includes",
+    ],
+)
+
+filegroup(
+    name = "ar_files",
+    srcs = [],
+)
+
+filegroup(
+    name = "linker_files",
+    srcs = [],
+)
 # vim: set tabstop=4 softtabstop=4 shiftwidth=4 expandtab ft=bzl:

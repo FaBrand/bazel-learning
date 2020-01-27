@@ -783,6 +783,7 @@ def _impl(ctx):
         "%sysroot%/usr/include/c++/8/backward",
         "%sysroot%/usr/lib/gcc/x86_64-linux-gnu/8/include",
         "%sysroot%/usr/include/x86_64-linux-gnu/c++/8",
+        "%package(@libcpp//)%/usr/lib/gcc/x86_64-linux-gnu/8/include",
     ]
 
     return [

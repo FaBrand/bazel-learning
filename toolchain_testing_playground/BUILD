@@ -3,12 +3,6 @@ load(":gcc_config.bzl", "cc_toolchain_config")
 package(default_visibility = ["//visibility:public"])
 
 filegroup(
-    name = "all_files",
-    srcs = glob(["gcc/*"]) + ["@gcc//:all_files"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
     name = "empty",
     srcs = [],
 )
@@ -19,11 +13,11 @@ cc_toolchain_config(
 
 cc_toolchain(
     name = "cc-toolchain-x64_linux_gcc",
-    all_files = ":all_files",
-    ar_files = ":all_files",
-    compiler_files = ":all_files",
+    all_files = "empty",
+    ar_files = "@gcc//:all_files",
+    compiler_files = "@gcc//:compiler_files",
     dwp_files = ":empty",
-    linker_files = ":all_files",
+    linker_files = "@gcc//:all_files",
     objcopy_files = ":empty",
     strip_files = ":empty",
     supports_param_files = 1,

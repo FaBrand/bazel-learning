@@ -16,20 +16,21 @@ debian_archive(
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/g++-8_8.3.0-6_amd64.deb": "d333c8986adff11fb54aed83e1b29f99996c321f7fb5b75614d66e5aa611a5d8",
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/gcc-8-base_8.3.0-6_amd64.deb": "1b00f7cef567645a7e695caf6c1ad395577e7d2e903820097ebd3496ddcfcc84",
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/gcc-8_8.3.0-6_amd64.deb": "05e90f94363055cf27cd88b7968820645180d37a649a93cf5d7ea6f3c7fe973e",
-        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libcc1-0_8.3.0-6_amd64.deb": "579c11dd6004f06ac2639b338c320fde794ed3c36a1d2be559ec282ea3042dd7",
+        # "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libcc1-0_8.3.0-6_amd64.deb": "579c11dd6004f06ac2639b338c320fde794ed3c36a1d2be559ec282ea3042dd7",
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libgcc-8-dev_8.3.0-6_amd64.deb": "a52d5216858c7185bc245e52ad95a6ad515d087bc25e8556df06c5626b41a837",
-        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libstdc++-8-dev_8.3.0-6_amd64.deb": "79965b74e6c839e7b90d24ac5b61840f57872ecb1e4ac1007937036c85364f82",
-        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libstdc++6_8.3.0-6_amd64.deb": "5cc70625329655ff9382580971d4616db8aa39af958b7c995ee84598f142a4ee",
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-defaults/g++_8.3.0-1_amd64.deb": "ae756853eff06749370f37f717339098d7ead8eb40d8eca9050c4dd8d64be33a",
         "http://ftp.de.debian.org/debian/pool/main/g/gcc-defaults/gcc_8.3.0-1_amd64.deb": "c472cc849c02f03522b44e12191b6dfde496afa2a53b862f9b913dc2ae218f70",
+        "http://security.debian.org/debian-security/pool/updates/main/l/linux/linux-libc-dev_4.19.67-2+deb10u2_amd64.deb": "71845ca23960692bae5e02abd56f0782010fc824b54b1dacb059a4a880b7e191",
+        # c++ standard library
+        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libstdc++6_8.3.0-6_amd64.deb": "5cc70625329655ff9382580971d4616db8aa39af958b7c995ee84598f142a4ee",
+        "http://ftp.de.debian.org/debian/pool/main/g/gcc-8/libstdc++-8-dev_8.3.0-6_amd64.deb": "79965b74e6c839e7b90d24ac5b61840f57872ecb1e4ac1007937036c85364f82",
         "http://ftp.de.debian.org/debian/pool/main/g/glibc/libc6-dev_2.24-11+deb9u4_amd64.deb": "3e7655930adc6ed69ddb1c263ef6fa428590e19479863785adc723367f6bf21d",
-        "http://ftp.de.debian.org/debian/pool/main/l/linux/linux-libc-dev_4.9.189-3_amd64.deb": "0ff40723914098bc1a569fbeb400b0960f3a800c2e1c6738e609e08d1486bb03",
         # binutils
         "http://ftp.de.debian.org/debian/pool/main/b/binutils/binutils_2.31.1-16_amd64.deb": "c2696ba3984dd2fc90bacb01c3bbb6c5f4477bcabbc90fa084cb9fe971b66d6d",
         "http://ftp.de.debian.org/debian/pool/main/b/binutils/binutils-x86-64-linux-gnu_2.31.1-16_amd64.deb": "c1da1cffff8a024b5eca0a6795558d9e0ec88fbd24fe059490dc665dc5cac92f",
-        "http://ftp.de.debian.org/debian/pool/main/b/binutils/binutils-common_2.31.1-16_amd64.deb": "95c39f813e7c99f93d7de3bab571f4c2f52c917a64d4dc33be8ef7c4dad14adb",
+        # "http://ftp.de.debian.org/debian/pool/main/b/binutils/binutils-common_2.31.1-16_amd64.deb": "95c39f813e7c99f93d7de3bab571f4c2f52c917a64d4dc33be8ef7c4dad14adb",
         "http://ftp.de.debian.org/debian/pool/main/b/binutils/libbinutils_2.31.1-16_amd64.deb": "bae88af666531b3b46a5c1b54f699e7354264e6fc1654b02bb537f2076694b05",
-        "http://ftp.de.debian.org/debian/pool/main/z/zlib/zlib1g_1.2.11.dfsg-1_amd64.deb": "61bc9085aadd3007433ce6f560a08446a3d3ceb0b5e061db3fc62c42fbfe3eff",
+        # "http://ftp.de.debian.org/debian/pool/main/z/zlib/zlib1g_1.2.11.dfsg-1_amd64.deb": "61bc9085aadd3007433ce6f560a08446a3d3ceb0b5e061db3fc62c42fbfe3eff",
     },
 )
 
