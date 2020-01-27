@@ -37,7 +37,10 @@ filegroup(
 
 filegroup(
     name = "ar_files",
-    srcs = [],
+    srcs = [
+        "usr/bin/ar",
+        "usr/lib/x86_64-linux-gnu/libbfd-2.31.1-system.so",
+    ],
 )
 
 filegroup(

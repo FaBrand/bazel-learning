@@ -14,7 +14,7 @@ cc_toolchain_config(
 cc_toolchain(
     name = "cc-toolchain-x64_linux_gcc",
     all_files = "empty",
-    ar_files = "@gcc//:all_files",
+    ar_files = "@gcc//:ar_files",
     compiler_files = "@gcc//:compiler_files",
     dwp_files = ":empty",
     linker_files = "@gcc//:all_files",
