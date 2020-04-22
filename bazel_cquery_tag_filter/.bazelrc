@@ -1,0 +1,5 @@
+build --build_tag_filters=-foo
+cquery:example  deps(//package_a/...)
+cquery:example  --noimplicit_deps
+cquery:example  --nohost_deps
+
