@@ -1,6 +1,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
-load(":transition_rule.bzl", "cc_transition")
-load(":cc_api_rules.bzl", "cc_bin")
+load("//output_dir_names:transition_rule.bzl", "cc_transition")
+load("//output_dir_names:cc_api_rules.bzl", "cc_bin")
 
 cc_library(
     name = "foo",
