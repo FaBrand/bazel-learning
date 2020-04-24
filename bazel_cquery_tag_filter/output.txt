@@ -1,0 +1,19 @@
+INFO: Reading 'startup' options from c:\dev\home\user.bazelrc: --output_base=C:\b, --output_user_root=C:\bazelUserRoot
+INFO: Options provided by the client:
+  Inherited 'common' options: --isatty=0 --terminal_columns=80
+INFO: Options provided by the client:
+  Inherited 'build' options: --python_path=C:/Program Files/Python37/python.exe
+INFO: Reading rc options for 'cquery' from c:\dev\home\user.bazelrc:
+  Inherited 'build' options: --explain=C:\dev\bazel_explain.txt --verbose_explanations --experimental_execution_log_file=C:\dev\local_bazel_execution.log --announce_rc --repository_cache=C:\bazel_repository_cache
+Loading: 
+Loading: 0 packages loaded
+Analyzing: target //package_a:package_a (0 packages loaded, 0 targets configured)
+INFO: Analyzed target //package_a:package_a (0 packages loaded, 0 targets configured).
+INFO: Found 1 target...
+//package_a:package_a (8e1baeccb049cf233a6df89aa3418c90e5a6780a625b49a75b8333191506e665)
+@bazel_tools//tools/cpp:toolchain_type (8e1baeccb049cf233a6df89aa3418c90e5a6780a625b49a75b8333191506e665)
+//package_b:package_b (8e1baeccb049cf233a6df89aa3418c90e5a6780a625b49a75b8333191506e665)
+INFO: Elapsed time: 0.140s
+INFO: 0 processes.
+INFO: Build completed successfully, 0 total actions
+INFO: Build completed successfully, 0 total actions

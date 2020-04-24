@@ -1,0 +1,51 @@
+#!/bin/bash
+function call_bazel {
+    echo Content of .bazelrc:
+    echo ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    cat .bazelrc
+    echo ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    echo Query Output:
+    echo '************************************************************'
+    bazel cquery 'deps(//package_a/...)' --noimplicit_deps --nohost_deps --notool_deps 2>&1 | grep '//package_b:package_b'
+    echo $?
+    echo '************************************************************'
+}
+
+
+function run_test {
+    version="${1}"
+    echo "Runnning with version: ${version}"
+    echo "${version}"> .bazelversion
+    echo "" > .bazelrc
+
+    bazel shutdown
+    bazel version
+
+    echo '############################################################'
+    echo Expect to see //package_b:package_b as a dependency
+    sleep 5s
+    call_bazel
+    echo '############################################################'
+    sleep 5s
+
+    echo '############################################################'
+    echo Expect to see no dependency:
+    sleep 5s
+    echo "build --build_tag_filters=-foo"> .bazelrc
+    call_bazel
+    echo '############################################################'
+    sleep 5s
+
+
+    echo "" > .bazelrc
+
+    echo '############################################################'
+    echo "Expect to see //package_b:package_b as a dependency"
+    sleep 5s
+    call_bazel
+    echo '############################################################'
+    sleep 5s
+}
+
+
