@@ -1,9 +1,10 @@
 load("//:cc_api_rules.bzl", "cc_bin")
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_deb", "pkg_tar")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load(":generator.bzl", "generator")
 
-write_file(
+generator(
     name = "generated_file",
-    out = "main.c",
     content = """
 int main(int argc, char* argv[])
 {
@@ -13,7 +14,7 @@ int main(int argc, char* argv[])
     return 1;
 #endif
 }
-""".split("\n"),
+""",
 )
 
 cc_bin(
@@ -28,4 +29,13 @@ cc_bin(
     srcs = [":generated_file"],
     # Sets transition with copts
     copt = ["-DVARIANTB"],
+)
+
+pkg_tar(
+    name = "pkg",
+    srcs = [
+        "generated_file",
+        "variant_a",
+        "variant_b",
+    ],
 )
