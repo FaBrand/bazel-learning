@@ -1,3 +1,12 @@
+def _cc_bin_transition_impl(settings, attr):
+    return {}
+
+_cc_bin_transition = transition(
+    implementation = _cc_bin_transition_impl,
+    inputs = ["//command_line_option:copt"],
+    outputs = [],
+)
+
 def _generator_impl(ctx):
     out = ctx.actions.declare_file(ctx.label.name + ".cpp")
 
@@ -12,7 +21,7 @@ def _generator_impl(ctx):
 
     return DefaultInfo(files = depset([out]))
 
-generator = rule(
+_generator = rule(
     implementation = _generator_impl,
     attrs = {
         "content": attr.string(),
@@ -22,5 +31,28 @@ generator = rule(
             allow_single_file = True,
             default = "//with_a_generator:generator.sh",
         ),
+        "_whitelist_function_transition": attr.label(default = Label("//tools/whitelists/function_transition_whitelist:function_transition_whitelist")),  #this path is hard coded by bazel
+    },
+    cfg = _cc_bin_transition,
+)
+
+as_host = rule(
+    implementation = _as_host_impl,
+    attrs = {
+        "srcs": attr.label_list(
+            allow_files = True,
+            cfg = "host",
+        ),
     },
 )
+
+def generator(name, **kwargs):
+    _generator(
+        name = name + "_gen",
+        **kwargs
+    )
+
+    as_host(
+        name = name,
+        srcs = [name + "_gen"],
+    )
