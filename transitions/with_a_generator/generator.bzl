@@ -36,10 +36,21 @@ _generator = rule(
     cfg = _cc_bin_transition,
 )
 
+def _as_host_impl(ctx):
+    providers = [
+        DefaultInfo,
+        OutputGroupInfo,
+    ]
+    return [
+        ctx.attr.src[prov]
+        for prov in providers
+        if prov in ctx.attr.src
+    ]
+
 as_host = rule(
     implementation = _as_host_impl,
     attrs = {
-        "srcs": attr.label_list(
+        "src": attr.label(
             allow_files = True,
             cfg = "host",
         ),
@@ -54,5 +65,5 @@ def generator(name, **kwargs):
 
     as_host(
         name = name,
-        srcs = [name + "_gen"],
+        src = name + "_gen",
     )
