@@ -1,6 +1,14 @@
 package(default_visibility = ["//visibility:public"])
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
 
 filegroup(
     name = "file",
     srcs = ["ext_file"],
+)
+
+write_file(
+    name = "generated_ext_file",
+    out = "generated_file",
+    content = ["generated file"],
+    visibility = ["//visibility:public"],
 )
