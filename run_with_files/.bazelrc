@@ -1,0 +1,2 @@
+run --experimental_strict_action_env
+build --experimental_strict_action_env
