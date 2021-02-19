@@ -13,35 +13,10 @@ constraint_value(
 )
 
 platform(
-    name = "linux_platform",
-    constraint_values = [
-        # To be more specific about which toolchain to use with a custom constraint
-        # Avoid generic constraint values that match too widely
-        # Bazel acts greedy here and takes the first toolchain that matches on the minimum set of constraint values
-        # e.g. here toolchain_linux is selected even though `--platforms=//:custom_platform` is set
-
-        # The combination of constraint choices that this platform comprises.
-        # In order for a platform to apply to a given environment, the environment must have at least the values in this list.
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
-    ],
-)
-
-platform(
     name = "custom_platform",
     constraint_values = [
-        # To be more specific about which toolchain to use with a custom constraint
-        # Avoid generic constraint values that match too widely
-        # Bazel acts greedy here and takes the first toolchain that matches on the minimum set of constraint values
-        # e.g. here toolchain_linux is selected even though `--platforms=//:custom_platform` is set
-
-        # The combination of constraint choices that this platform comprises.
-        # In order for a platform to apply to a given environment, the environment must have at least the values in this list.
-        # "@platforms//os:linux",
-        # "@platforms//cpu:x86_64",
         ":value_a",
     ],
-    parents = [":linux_platform"],
 )
 
 #######################################################################
