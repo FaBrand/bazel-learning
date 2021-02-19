@@ -1,0 +1,23 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "tool_windows",
+    build_file_content = """load("@rules_cc//cc:defs.bzl", "cc_binary")
+    package(default_visibility = ["//visibility:public"])
+    cc_binary(
+      name = "tool"
+    )
+    """,
+    sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    urls = ["http://this.does.not.exist/tool.zip"],
+)
+
+local_repository(
+    name = "tool_linux",
+    path = "local_tool",
+)
+
+register_toolchains(
+    "//:tool_toolchain_linux",
+    "//:tool_toolchain_windows",
+)
