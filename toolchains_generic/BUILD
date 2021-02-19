@@ -15,6 +15,8 @@ constraint_value(
 platform(
     name = "custom_platform",
     constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
         ":value_a",
     ],
 )
@@ -75,6 +77,8 @@ toolchain(
         "@platforms//cpu:x86_64",
     ],
     target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
         "//:value_a",
     ],
     toolchain = ":tool_linux_custom",
