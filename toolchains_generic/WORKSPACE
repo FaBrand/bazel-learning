@@ -17,7 +17,13 @@ local_repository(
     path = "local_tool",
 )
 
+local_repository(
+    name = "tool_linux_custom",
+    path = "local_tool",
+)
+
 register_toolchains(
-    "//:tool_toolchain_linux",
     "//:tool_toolchain_windows",
+    "//:tool_toolchain_linux",
+    "//:tool_toolchain_linux_custom",
 )
